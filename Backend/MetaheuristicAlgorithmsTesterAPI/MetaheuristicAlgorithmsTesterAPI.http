@@ -1,0 +1,6 @@
+@MetaheuristicAlgorithmsTesterAPI_HostAddress = http://localhost:5261
+
+GET {{MetaheuristicAlgorithmsTesterAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
