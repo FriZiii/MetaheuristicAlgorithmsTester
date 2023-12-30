@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaheuristicAlgorithmsTester.Api", "MetaheuristicAlgorithmsTester.Api\MetaheuristicAlgorithmsTester.Api.csproj", "{72F44339-3206-4216-9779-1BA41128F0DC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaheuristicAlgorithmsTester.Domain", "MetaheuristicAlgorithmsTester.Domain\MetaheuristicAlgorithmsTester.Domain.csproj", "{4ACFB8CF-9B31-4D55-BB29-320DC0D761DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaheuristicAlgorithmsTester.Application", "MetaheuristicAlgorithmsTester.Application\MetaheuristicAlgorithmsTester.Application.csproj", "{8AC61434-3E6A-431D-9A7F-DE7728B2FDC8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaheuristicAlgorithmsTester.Infrastracture", "MetaheuristicAlgorithmsTester.Infrastracture\MetaheuristicAlgorithmsTester.Infrastracture.csproj", "{8C61894F-E548-4AB7-B506-9435DCFF6F7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlgorithmInterfaces", "AlgorithmInterfaces\AlgorithmInterfaces.csproj", "{3A7FBAFE-578C-4784-AEE8-1BCF9AE6D169}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72F44339-3206-4216-9779-1BA41128F0DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72F44339-3206-4216-9779-1BA41128F0DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72F44339-3206-4216-9779-1BA41128F0DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72F44339-3206-4216-9779-1BA41128F0DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ACFB8CF-9B31-4D55-BB29-320DC0D761DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ACFB8CF-9B31-4D55-BB29-320DC0D761DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ACFB8CF-9B31-4D55-BB29-320DC0D761DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ACFB8CF-9B31-4D55-BB29-320DC0D761DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AC61434-3E6A-431D-9A7F-DE7728B2FDC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AC61434-3E6A-431D-9A7F-DE7728B2FDC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AC61434-3E6A-431D-9A7F-DE7728B2FDC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AC61434-3E6A-431D-9A7F-DE7728B2FDC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C61894F-E548-4AB7-B506-9435DCFF6F7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C61894F-E548-4AB7-B506-9435DCFF6F7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C61894F-E548-4AB7-B506-9435DCFF6F7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C61894F-E548-4AB7-B506-9435DCFF6F7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A7FBAFE-578C-4784-AEE8-1BCF9AE6D169}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A7FBAFE-578C-4784-AEE8-1BCF9AE6D169}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A7FBAFE-578C-4784-AEE8-1BCF9AE6D169}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A7FBAFE-578C-4784-AEE8-1BCF9AE6D169}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {024BEA63-BB61-4848-BF07-943E11FBDBD3}
+	EndGlobalSection
+EndGlobal
