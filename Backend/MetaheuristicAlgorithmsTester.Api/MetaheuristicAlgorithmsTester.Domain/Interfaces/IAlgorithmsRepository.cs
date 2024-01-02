@@ -4,6 +4,7 @@ namespace MetaheuristicAlgorithmsTester.Domain.Interfaces
 {
     public interface IAlgorithmsRepository
     {
-        Task AddAlgorithm(Algorithm algorithm);
+        Task<Algorithm?> AddAlgorithm(Algorithm algorithm);
+        Task<Algorithm?> GetAlgorithm(int id);
     }
 }
