@@ -11,7 +11,10 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Persistence
 
         }
 
+
         public DbSet<Algorithm> Algorithms { get; set; } = null!;
+        public DbSet<ParamInfo> Parameters { get; set; }
+        public DbSet<FitnessFunction> FitnessFunctions { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -7,25 +7,25 @@ using Microsoft.Extensions.Configuration;
 
 namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
 {
-    internal class AlgorithmsRepository(BlobServiceClient blobServiceClient, IConfiguration configuration, Context context) : IAlgorithmsRepository
+    public class FitnessFunctionRepository(BlobServiceClient blobServiceClient, IConfiguration configuration, Context context) : IFitnessFunctionRepository
     {
-        public async Task<Algorithm?> AddAlgorithm(Algorithm algorithm)
+        public async Task<FitnessFunction?> AddFitnessFunction(FitnessFunction fitnessFunction)
         {
-            if (algorithm.DllFileBytes != null)
+            if (fitnessFunction.DllFileBytes != null)
             {
-                var containerName = configuration.GetSection("Storage:StorageNameAlgorithms").Value;
+                var containerName = configuration.GetSection("Storage:StorageNameFitnessFunctions").Value;
 
                 var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-                var blobClient = containerClient.GetBlobClient(algorithm.FileName);
+                var blobClient = containerClient.GetBlobClient(fitnessFunction.FileName);
 
-                using (MemoryStream stream = new MemoryStream(algorithm.DllFileBytes))
+                using (MemoryStream stream = new MemoryStream(fitnessFunction.DllFileBytes))
                 {
                     await blobClient.UploadAsync(stream, true);
                 }
 
                 try
                 {
-                    context.Algorithms.Add(algorithm);
+                    context.FitnessFunctions.Add(fitnessFunction);
                     await context.SaveChangesAsync();
                 }
                 catch (Exception ex)
@@ -33,19 +33,19 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
                     return null;
                 }
 
-                return algorithm;
+                return fitnessFunction;
             }
             return null;
         }
 
-        public async Task<Algorithm?> GetAlgorithmById(int id)
+        public async Task<FitnessFunction?> GetFitnessFunctionById(int id)
         {
-            var algorithm = context.Algorithms.Include(o => o.Parameters).FirstOrDefault(a => a.Id == id);
-            if (algorithm != null)
+            var fitnessFunctions = context.FitnessFunctions.FirstOrDefault(a => a.Id == id);
+            if (fitnessFunctions != null)
             {
-                var containerName = configuration.GetSection("Storage:StorageNameAlgorithms").Value;
+                var containerName = configuration.GetSection("Storage:StorageNameFitnessFunctions").Value;
                 var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-                var blobClient = containerClient.GetBlobClient(algorithm.FileName);
+                var blobClient = containerClient.GetBlobClient(fitnessFunctions.FileName);
 
                 try
                 {
@@ -54,10 +54,10 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
                     using (var memoryStream = new MemoryStream())
                     {
                         await response.Value.Content.CopyToAsync(memoryStream);
-                        algorithm.DllFileBytes = memoryStream.ToArray();
+                        fitnessFunctions.DllFileBytes = memoryStream.ToArray();
                     }
 
-                    return algorithm;
+                    return fitnessFunctions;
                 }
                 catch (Exception ex)
                 {
@@ -67,7 +67,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
             return null!;
         }
 
-        public async Task<IEnumerable<Algorithm?>> GetAllAlgorithms()
-             => await context.Algorithms.Include(o => o.Parameters).ToListAsync();
+        public async Task<IEnumerable<FitnessFunction?>> GetAllFitnessFunctions()
+            => await context.FitnessFunctions.ToListAsync();
     }
 }

@@ -13,9 +13,10 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Extensions
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IAlgorithmsRepository, AlgorithmsRepository>();
+            services.AddScoped<IFitnessFunctionRepository, FitnessFunctionRepository>();
 
             services.AddDbContext<Context>(options =>
-               options.UseSqlServer(configuration.GetSection("Database:ConnectionString").Value));
+               options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString")));
 
             services.AddAzureClients(builder =>
             {

@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "ignored": "true",
+      "type": "mssql",
+      "connectionId": "Database:ConnectionString"
+    },
+    "mssql2": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/MetaheuristicAlgorithmsTesterApi20240102183449/providers/Microsoft.ServiceLinker/linkers/ConnectionStringsDefaultConnectionString_B3E3C08FB8",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/metaheuristicalgorithmstesterdbserver/databases/MetaheuristicAlgorithmsTester",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:DefaultConnectionString",
+      "dynamicId": null
+    }
+  }
+}

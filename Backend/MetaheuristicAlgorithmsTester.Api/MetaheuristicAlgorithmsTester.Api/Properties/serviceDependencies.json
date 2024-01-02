@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "ignored": "true",
+      "type": "mssql",
+      "connectionId": "Database:ConnectionString"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:DefaultConnectionString",
+      "dynamicId": null
+    },
+    "storage1": {
+      "ignored": "true",
+      "type": "storage",
+      "connectionId": "Storage:ConnectionString"
+    }
+  }
+}

@@ -3,6 +3,7 @@ using MetaheuristicAlgorithmsTester.Infrastracture.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MetaheuristicAlgorithmsTester.Infrastracture.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240102154524_addedFitnessFunction")]
+    partial class addedFitnessFunction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,52 +72,6 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FitnessFunctions");
-                });
-
-            modelBuilder.Entity("MetaheuristicAlgorithmsTester.Domain.Entities.ParamInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AlgorithmId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("LowerBoundary")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("UpperBoundary")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AlgorithmId");
-
-                    b.ToTable("Parameters");
-                });
-
-            modelBuilder.Entity("MetaheuristicAlgorithmsTester.Domain.Entities.ParamInfo", b =>
-                {
-                    b.HasOne("MetaheuristicAlgorithmsTester.Domain.Entities.Algorithm", null)
-                        .WithMany("Parameters")
-                        .HasForeignKey("AlgorithmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("MetaheuristicAlgorithmsTester.Domain.Entities.Algorithm", b =>
-                {
-                    b.Navigation("Parameters");
                 });
 #pragma warning restore 612, 618
         }
