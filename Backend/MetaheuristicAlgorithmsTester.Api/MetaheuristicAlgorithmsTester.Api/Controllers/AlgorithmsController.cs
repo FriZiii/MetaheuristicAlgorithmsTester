@@ -1,5 +1,6 @@
 using MediatR;
 using MetaheuristicAlgorithmsTester.Application.Menagments.Algorithms.AddAlgorithm;
+using MetaheuristicAlgorithmsTester.Application.Menagments.Algorithms.DeleteAlgorithmById;
 using MetaheuristicAlgorithmsTester.Application.Menagments.Algorithms.GetAlgorithmById;
 using MetaheuristicAlgorithmsTester.Application.Menagments.Algorithms.GetAllAlgorithms;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +52,20 @@ namespace MetaheuristicAlgorithmsTester.Api.Controllers
             else
             {
                 return BadRequest(result);
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteById(int id)
+        {
+            var result = await mediator.Send(new DeleteAlgorithmById() { Id = id });
+            if (result)
+            {
+                return Ok($"Algorithm with id {id} has been removed");
+            }
+            else
+            {
+                return BadRequest($"No algorithm found with id {id}");
             }
         }
     }

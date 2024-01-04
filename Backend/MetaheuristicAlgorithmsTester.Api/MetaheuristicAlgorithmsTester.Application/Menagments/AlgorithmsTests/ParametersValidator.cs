@@ -26,6 +26,11 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests
                     {
                         errors.Add(new ParametersError() { Message = $"The parameter {paramInfos[i].Name} should be less then {paramInfos[i].UpperBoundary}", ParameterId = paramInfos[i].Id });
                     }
+
+                    if (paramInfos[i].IsFloatingPoint && parameters[i] % 1 != 0)
+                    {
+                        errors.Add(new ParametersError() { Message = $"The parameter {paramInfos[i].Name} should not be floating point", ParameterId = paramInfos[i].Id });
+                    }
                 }
                 return errors;
             }

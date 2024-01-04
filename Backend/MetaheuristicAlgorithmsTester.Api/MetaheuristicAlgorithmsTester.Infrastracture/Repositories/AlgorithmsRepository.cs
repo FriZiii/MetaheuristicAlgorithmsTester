@@ -28,7 +28,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
                     context.Algorithms.Add(algorithm);
                     await context.SaveChangesAsync();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return null;
                 }
@@ -36,6 +36,24 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
                 return algorithm;
             }
             return null;
+        }
+
+        public async Task<bool> DeleteAlgorithmById(int id)
+        {
+            var algorithmToDelete = await context.Algorithms.Where(a => a.Id == id).FirstOrDefaultAsync();
+            if (algorithmToDelete != null)
+            {
+                var containerName = configuration.GetSection("Storage:StorageNameAlgorithms").Value;
+                var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                var blobClient = containerClient.GetBlobClient(algorithmToDelete.FileName);
+
+                await blobClient.DeleteIfExistsAsync();
+
+                context.Algorithms.Remove(algorithmToDelete);
+                await context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
         public async Task<Algorithm?> GetAlgorithmById(int id)
@@ -59,7 +77,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
 
                     return algorithm;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return null!;
                 }

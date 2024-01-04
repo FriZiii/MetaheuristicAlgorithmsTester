@@ -7,5 +7,6 @@ namespace MetaheuristicAlgorithmsTester.Domain.Interfaces
         Task<FitnessFunction?> AddFitnessFunction(FitnessFunction fitnessFunction);
         Task<FitnessFunction?> GetFitnessFunctionById(int id);
         Task<IEnumerable<FitnessFunction?>> GetAllFitnessFunctions();
+        Task<bool> DeleteFitnessFunctionById(int id);
     }
 }

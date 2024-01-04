@@ -12,10 +12,10 @@ namespace MetaheuristicAlgorithmsTester.Application.Mappings
         public MappingsProfile()
         {
             CreateMap<AddAlgorithmDto, Algorithm>()
-                .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.DllFile.FileName));
+                .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => $"{src.Name}-{DateTime.Now:yy-MM-dd_HH-mm-ss}"));
 
             CreateMap<AddFitnessFunctionDto, FitnessFunction>()
-                .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.DllFile.FileName));
+                .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => $"{src.Name}-{DateTime.Now:yy-MM-dd_HH-mm-ss}"));
 
             CreateMap<Algorithm, AlgorithmDto>();
             CreateMap<FitnessFunction, FitnessFunctionDto>();

@@ -28,7 +28,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
                     context.FitnessFunctions.Add(fitnessFunction);
                     await context.SaveChangesAsync();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return null;
                 }
@@ -59,7 +59,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
 
                     return fitnessFunctions;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return null!;
                 }
@@ -69,5 +69,23 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
 
         public async Task<IEnumerable<FitnessFunction?>> GetAllFitnessFunctions()
             => await context.FitnessFunctions.ToListAsync();
+
+        public async Task<bool> DeleteFitnessFunctionById(int id)
+        {
+            var fitnessFunctionToDelete = await context.FitnessFunctions.Where(a => a.Id == id).FirstOrDefaultAsync();
+            if (fitnessFunctionToDelete != null)
+            {
+                var containerName = configuration.GetSection("Storage:StorageNameFitnessFunctions").Value;
+                var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                var blobClient = containerClient.GetBlobClient(fitnessFunctionToDelete.FileName);
+
+                await blobClient.DeleteIfExistsAsync();
+
+                context.FitnessFunctions.Remove(fitnessFunctionToDelete);
+                await context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }
