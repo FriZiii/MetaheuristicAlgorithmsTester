@@ -61,6 +61,10 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                     int numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
                                     return new AlgorithmTestResult()
                                     {
+                                        TestedAlgorithmId = algorithm.Id,
+                                        TestedAlgorithmName = algorithm.Name,
+                                        TestedFitnessFunctionId = fitnessFunction.Id,
+                                        TestedFitnessFunctionName = fitnessFunction.Name,
                                         IsSuccesfull = true,
                                         Message = $"Succesfull!",
                                         FBest = fBestValue,
