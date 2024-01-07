@@ -14,6 +14,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Extensions
         {
             services.AddScoped<IAlgorithmsRepository, AlgorithmsRepository>();
             services.AddScoped<IFitnessFunctionRepository, FitnessFunctionRepository>();
+            services.AddScoped<IExecutedAlgorithmsRepository, ExecutedAlgorithmsRepository>();
 
             services.AddDbContext<Context>(options =>
                options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString")));

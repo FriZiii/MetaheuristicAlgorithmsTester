@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.TestSingleAlgorithm
 {
-    public class TestSingleAlgorithmHandler(IMediator mediator, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository)
+    public class TestSingleAlgorithmHandler(IMediator mediator, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository, IExecutedAlgorithmsRepository executedAlgorithmsRepository)
         : IRequestHandler<TestSingleAlgorithm, AlgorithmTestResult>
     {
         public async Task<AlgorithmTestResult> Handle(TestSingleAlgorithm request, CancellationToken cancellationToken)
@@ -59,6 +59,19 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                     double[] xBestValue = (double[])xBestProperty.GetValue(algorithmInstance);
                                     double fBestValue = (double)fBestProperty.GetValue(algorithmInstance);
                                     int numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
+
+                                    await executedAlgorithmsRepository.AddExecudedAlgorithm(new Domain.Entities.ExecutedAlgorithm()
+                                    {
+                                        TestedAlgorithmId = algorithm.Id,
+                                        TestedAlgorithmName = algorithm.Name,
+                                        TestedFitnessFunctionId = fitnessFunction.Id,
+                                        TestedFitnessFunctionName = fitnessFunction.Name,
+                                        Parameters = request.Parameters,
+                                        NumberOfEvaluationFitnessFunction = numberOfEvaluationFitnessFunctionValue,
+                                        FBest = fBestValue,
+                                        XBest = xBestValue,
+                                    });
+
                                     return new AlgorithmTestResult()
                                     {
                                         TestedAlgorithmId = algorithm.Id,
