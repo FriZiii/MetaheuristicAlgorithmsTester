@@ -60,8 +60,9 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                     double fBestValue = (double)fBestProperty.GetValue(algorithmInstance);
                                     int numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
 
-                                    await executedAlgorithmsRepository.AddExecudedAlgorithm(new Domain.Entities.ExecutedAlgorithm()
+                                    var executedId = await executedAlgorithmsRepository.AddExecudedAlgorithm(new Domain.Entities.ExecutedAlgorithm()
                                     {
+                                        Date = DateOnly.FromDateTime(DateTime.Now),
                                         TestedAlgorithmId = algorithm.Id,
                                         TestedAlgorithmName = algorithm.Name,
                                         TestedFitnessFunctionId = fitnessFunction.Id,
@@ -74,6 +75,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
 
                                     return new AlgorithmTestResult()
                                     {
+                                        ExecutedTestId = executedId,
                                         TestedAlgorithmId = algorithm.Id,
                                         TestedAlgorithmName = algorithm.Name,
                                         TestedFitnessFunctionId = fitnessFunction.Id,

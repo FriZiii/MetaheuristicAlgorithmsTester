@@ -4,6 +4,7 @@ namespace MetaheuristicAlgorithmsTester.Domain.Interfaces
 {
     public interface IExecutedAlgorithmsRepository
     {
-        public Task AddExecudedAlgorithm(ExecutedAlgorithm executedAlgorithm);
+        public Task<int> AddExecudedAlgorithm(ExecutedAlgorithm executedAlgorithm);
+        Task<ExecutedAlgorithm?> GetExecutedAlgorithmById(int algorithmId);
     }
 }

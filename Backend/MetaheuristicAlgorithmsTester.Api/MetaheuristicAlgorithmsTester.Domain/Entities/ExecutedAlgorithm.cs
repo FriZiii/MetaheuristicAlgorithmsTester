@@ -3,6 +3,7 @@
     public class ExecutedAlgorithm
     {
         public int Id { get; set; }
+        public DateOnly Date { get; set; } = default!;
         public int TestedAlgorithmId { get; set; }
         public string TestedAlgorithmName { get; set; } = default!;
 

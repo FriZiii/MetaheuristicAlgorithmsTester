@@ -2,6 +2,8 @@
 {
     public class AlgorithmTestResult
     {
+        public int ExecutedTestId { get; set; }
+
         public int TestedAlgorithmId { get; set; }
         public string TestedAlgorithmName { get; set; } = default!;
 
@@ -14,6 +16,5 @@
         public List<ParametersError> ParametersErrors { get; set; } = default!;
         public string Message { get; set; } = default!;
         public bool IsSuccesfull { get; set; }
-
     }
 }

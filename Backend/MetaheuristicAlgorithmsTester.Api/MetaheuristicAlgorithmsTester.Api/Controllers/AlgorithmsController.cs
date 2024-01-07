@@ -11,8 +11,6 @@ namespace MetaheuristicAlgorithmsTester.Api.Controllers
     [Route("[controller]")]
     public class AlgorithmsController(IMediator mediator) : ControllerBase
     {
-        private readonly IMediator mediator = mediator;
-
         [HttpPost(Name = "PostAlgorithm")]
         public async Task<IActionResult> PostAgorithm(AddAlgorithm addAlgorithm)
         {
