@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.StaticFiles;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports.PdfReports.PdfReportOfSingleAlgorithm
 {
-    public class PdfReportOfSingleAlgorithmHandler(IExecutedAlgorithmsRepository executedAlgorithmsRepository) : IRequestHandler<PdfReportOfSingleAlgorithm, ReportResult>
+    public class PdfReportOfSingleAlgorithmHandler(IExecutedAlgorithmsRepository executedAlgorithmsRepository, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository) : IRequestHandler<PdfReportOfSingleAlgorithm, ReportResult>
     {
         public async Task<ReportResult> Handle(PdfReportOfSingleAlgorithm request, CancellationToken cancellationToken)
         {
@@ -13,7 +13,10 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports.PdfReport
             {
                 return new ReportResult() { IsSuccesfull = false, Message = $"The executed test with id {request.ExecutedId} was not found" };
             }
-            var fileContentRaw = GenerateReportContent.GeneratePpfContentOfSingleAlgorithmTest(execudedAlgorithmData);
+            var fitnessFunction = await fitnessFunctionRepository.GetFitnessFunctionById(execudedAlgorithmData.TestedFitnessFunctionId);
+            var algorithm = await algorithmsRepository.GetAlgorithmById(execudedAlgorithmData.TestedAlgorithmId);
+
+            var fileContentRaw = GenerateReportContent.GeneratePpfContentOfSingleAlgorithmTest(execudedAlgorithmData, algorithm, fitnessFunction);
 
             var pdfRenderer = new IronPdf.ChromePdfRenderer();
             var fileContent = pdfRenderer.RenderHtmlAsPdf(fileContentRaw).BinaryData;

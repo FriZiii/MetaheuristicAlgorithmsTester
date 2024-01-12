@@ -2,6 +2,6 @@
 {
     public interface IStateReader
     {
-        void LoadFromFileStateOfAlghoritm(string path);
+        public void LoadState(string state);
     }
 }

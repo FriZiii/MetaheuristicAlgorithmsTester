@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.StaticFiles;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports.PdfReports.PdfReportOfMultipleAlgorithms
 {
-    public class PdfReportOfMultipleAlgorithmsHandler(IExecutedAlgorithmsRepository executedAlgorithmsRepository) : IRequestHandler<PdfReportOfMultipleAlgorithms, ReportResult>
+    public class PdfReportOfMultipleAlgorithmsHandler(IExecutedAlgorithmsRepository executedAlgorithmsRepository, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository) : IRequestHandler<PdfReportOfMultipleAlgorithms, ReportResult>
     {
         public async Task<ReportResult> Handle(PdfReportOfMultipleAlgorithms request, CancellationToken cancellationToken)
         {
@@ -24,8 +24,19 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports.PdfReport
                 return new ReportResult() { IsSuccesfull = false, Message = $"The executed multiple test with ids {string.Join(", ", request.ExecutedIds)} was not found" };
             }
 
-            var fileContentRaw = GenerateReportContent.GeneratePpfContentOfMultipleAlgorithmsTest(execudedAlgorithmsData);
+            var algorithms = new List<Algorithm>();
+            foreach (var algorithmData in execudedAlgorithmsData)
+            {
+                var tempAlgorithm = await algorithmsRepository.GetAlgorithmById(algorithmData.TestedAlgorithmId);
+                if (tempAlgorithm != null)
+                {
+                    algorithms.Add(tempAlgorithm);
+                }
+            }
 
+            var fitnessFunctions = await fitnessFunctionRepository.GetFitnessFunctionById(execudedAlgorithmsData[0].TestedFitnessFunctionId);
+
+            var fileContentRaw = GenerateReportContent.GeneratePpfContentOfMultipleAlgorithmsTest(execudedAlgorithmsData, algorithms, fitnessFunctions);
             var pdfRenderer = new IronPdf.ChromePdfRenderer();
             var fileContent = pdfRenderer.RenderHtmlAsPdf(fileContentRaw).BinaryData;
 

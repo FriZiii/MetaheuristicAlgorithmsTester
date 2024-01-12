@@ -60,7 +60,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Algorithms.AddAlg
             }
             catch (Exception ex)
             {
-                return new AlgorithmResult() { IsSuccesfull = false, Message = $"Something went wrong: {ex.Message}" };
+                return new AlgorithmResult() { IsSuccesfull = false, Message = $"Something went wrong: {ex.Message}, {ex.StackTrace}, {ex.Source}" };
             }
         }
     }

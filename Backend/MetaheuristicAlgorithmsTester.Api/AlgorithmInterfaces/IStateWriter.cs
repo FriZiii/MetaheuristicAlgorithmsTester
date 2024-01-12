@@ -2,6 +2,6 @@
 {
     public interface IStateWriter
     {
-        void SaveToFileStateOfAlghoritm(string path);
+        public string GetCurrentState();
     }
 }

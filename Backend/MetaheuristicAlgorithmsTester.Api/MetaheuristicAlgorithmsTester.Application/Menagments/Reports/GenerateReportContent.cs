@@ -5,9 +5,12 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
 {
     public static class GenerateReportContent
     {
-        public static string GeneratePpfContentOfSingleAlgorithmTest(ExecutedAlgorithm executedAlgorithm)
+        public static string GeneratePpfContentOfSingleAlgorithmTest(ExecutedAlgorithm executedAlgorithm, Algorithm? algorithm, FitnessFunction? fitnessFunction)
         {
-            return $@"
+            if (algorithm == null || fitnessFunction == null)
+            {
+                //TODO: zwróc raport ale bez ParamName i description
+                return $@"
                     <div>
                         <p><strong>Id:</strong> {executedAlgorithm.Id}</p>
                         <p><strong>Date:</strong> {executedAlgorithm.Date}</p>
@@ -20,30 +23,76 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
                         <p><strong>NumberOfEvaluationFitnessFunction:</strong> {executedAlgorithm.NumberOfEvaluationFitnessFunction}</p>
                         <p><strong>Parameters:</strong> {string.Join(", ", executedAlgorithm.Parameters)}</p>
                     </div>";
+            }
+            else
+            {
+                //TODO: zwróc raport
+                return $@"
+                    <div>
+                        <p><strong>Id:</strong> {executedAlgorithm.Id}</p>
+                        <p><strong>Date:</strong> {executedAlgorithm.Date}</p>
+                        <p><strong>TestedAlgorithmId:</strong> {executedAlgorithm.TestedAlgorithmId}</p>
+                        <p><strong>TestedAlgorithmName:</strong> {executedAlgorithm.TestedAlgorithmName}</p>
+                        <p><strong>TestedFitnessFunctionId:</strong> {executedAlgorithm.TestedFitnessFunctionId}</p>
+                        <p><strong>TestedFitnessFunctionName:</strong> {executedAlgorithm.TestedFitnessFunctionName}</p>
+                        <p><strong>XBest:</strong> {string.Join(", ", executedAlgorithm.XBest)}</p>
+                        <p><strong>FBest:</strong> {executedAlgorithm.FBest}</p>
+                        <p><strong>NumberOfEvaluationFitnessFunction:</strong> {executedAlgorithm.NumberOfEvaluationFitnessFunction}</p>
+                        <p><strong>Parameters:</strong> {string.Join(", ", executedAlgorithm.Parameters)}</p>
+                    </div>";
+            }
         }
 
-        public static string GeneratePpfContentOfMultipleAlgorithmsTest(List<ExecutedAlgorithm> executedAlgorithms)
+        public static string GeneratePpfContentOfMultipleAlgorithmsTest(List<ExecutedAlgorithm> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
         {
-            StringBuilder htmlBuilder = new StringBuilder();
-
-            foreach (var executedAlgorithm in executedAlgorithms)
+            if (algorithms.Count == executedAlgorithms.Count && algorithms.All(x => x != null) && executedAlgorithms.All(y => y != null))
             {
-                htmlBuilder.AppendLine("<div>");
-                htmlBuilder.AppendLine($"<p><strong>Id:</strong> {executedAlgorithm.Id}</p>");
-                htmlBuilder.AppendLine($"<p><strong>Date:</strong> {executedAlgorithm.Date}</p>");
-                htmlBuilder.AppendLine($"<p><strong>TestedAlgorithmId:</strong> {executedAlgorithm.TestedAlgorithmId}</p>");
-                htmlBuilder.AppendLine($"<p><strong>TestedAlgorithmName:</strong> {executedAlgorithm.TestedAlgorithmName}</p>");
-                htmlBuilder.AppendLine($"<p><strong>TestedFitnessFunctionId:</strong> {executedAlgorithm.TestedFitnessFunctionId}</p>");
-                htmlBuilder.AppendLine($"<p><strong>TestedFitnessFunctionName:</strong> {executedAlgorithm.TestedFitnessFunctionName}</p>");
-                htmlBuilder.AppendLine($"<p><strong>XBest:</strong> {string.Join(", ", executedAlgorithm.XBest)}</p>");
-                htmlBuilder.AppendLine($"<p><strong>FBest:</strong> {executedAlgorithm.FBest}</p>");
-                htmlBuilder.AppendLine($"<p><strong>NumberOfEvaluationFitnessFunction:</strong> {executedAlgorithm.NumberOfEvaluationFitnessFunction}</p>");
-                htmlBuilder.AppendLine($"<p><strong>Parameters:</strong> {string.Join(", ", executedAlgorithm.Parameters)}</p>");
-                htmlBuilder.AppendLine("</div>");
-                htmlBuilder.AppendLine("<hr/>");
-            }
+                //TODO: zwróc raport
+                StringBuilder htmlBuilder = new StringBuilder();
 
-            return htmlBuilder.ToString();
+                foreach (var executedAlgorithm in executedAlgorithms)
+                {
+                    htmlBuilder.AppendLine("<div>");
+                    htmlBuilder.AppendLine($"<p><strong>Id:</strong> {executedAlgorithm.Id}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>Date:</strong> {executedAlgorithm.Date}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>TestedAlgorithmId:</strong> {executedAlgorithm.TestedAlgorithmId}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>TestedAlgorithmName:</strong> {executedAlgorithm.TestedAlgorithmName}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>TestedFitnessFunctionId:</strong> {executedAlgorithm.TestedFitnessFunctionId}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>TestedFitnessFunctionName:</strong> {executedAlgorithm.TestedFitnessFunctionName}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>XBest:</strong> {string.Join(", ", executedAlgorithm.XBest)}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>FBest:</strong> {executedAlgorithm.FBest}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>NumberOfEvaluationFitnessFunction:</strong> {executedAlgorithm.NumberOfEvaluationFitnessFunction}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>Parameters:</strong> {string.Join(", ", executedAlgorithm.Parameters)}</p>");
+                    htmlBuilder.AppendLine("</div>");
+                    htmlBuilder.AppendLine("<hr/>");
+                }
+
+                return htmlBuilder.ToString();
+            }
+            else
+            {
+                //TODO: zwróc raport ale bez ParamName i description
+                StringBuilder htmlBuilder = new StringBuilder();
+
+                foreach (var executedAlgorithm in executedAlgorithms)
+                {
+                    htmlBuilder.AppendLine("<div>");
+                    htmlBuilder.AppendLine($"<p><strong>Id:</strong> {executedAlgorithm.Id}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>Date:</strong> {executedAlgorithm.Date}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>TestedAlgorithmId:</strong> {executedAlgorithm.TestedAlgorithmId}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>TestedAlgorithmName:</strong> {executedAlgorithm.TestedAlgorithmName}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>TestedFitnessFunctionId:</strong> {executedAlgorithm.TestedFitnessFunctionId}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>TestedFitnessFunctionName:</strong> {executedAlgorithm.TestedFitnessFunctionName}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>XBest:</strong> {string.Join(", ", executedAlgorithm.XBest)}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>FBest:</strong> {executedAlgorithm.FBest}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>NumberOfEvaluationFitnessFunction:</strong> {executedAlgorithm.NumberOfEvaluationFitnessFunction}</p>");
+                    htmlBuilder.AppendLine($"<p><strong>Parameters:</strong> {string.Join(", ", executedAlgorithm.Parameters)}</p>");
+                    htmlBuilder.AppendLine("</div>");
+                    htmlBuilder.AppendLine("<hr/>");
+                }
+
+                return htmlBuilder.ToString();
+            }
         }
     }
 }

@@ -10,6 +10,7 @@
         double FBest { get; set; }
         int NumberOfEvaluationFitnessFunction { get; set; }
 
+        public bool ExecutedSuccessfully { get; set; }
         IStateWriter StateWriter { get; set; }
         IStateReader StateReader { get; set; }
 

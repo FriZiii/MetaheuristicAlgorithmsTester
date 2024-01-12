@@ -10,6 +10,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
     {
         public async Task<AlgorithmTestResult> Handle(TestSingleAlgorithm request, CancellationToken cancellationToken)
         {
+            var executedId = await executedAlgorithmsRepository.GetCurrentExecutedId();
             var algorithm = await algorithmsRepository.GetAlgorithmById(request.AlgorithmId);
             var fitnessFunction = await fitnessFunctionRepository.GetFitnessFunctionById(request.FitnessFunctionID);
 
@@ -50,7 +51,14 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                 try
                                 {
                                     object[] methodArgs = [fitnessFunctionInstance, request.Parameters.ToArray()];
-                                    method.Invoke(algorithmInstance, methodArgs);
+                                    try
+                                    {
+                                        method.Invoke(algorithmInstance, methodArgs);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        // TODO: return error
+                                    }
 
                                     PropertyInfo xBestProperty = algorithmType.GetProperty("XBest");
                                     PropertyInfo fBestProperty = algorithmType.GetProperty("FBest");
@@ -60,7 +68,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                     double fBestValue = (double)fBestProperty.GetValue(algorithmInstance);
                                     int numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
 
-                                    var executedId = await executedAlgorithmsRepository.AddExecudedAlgorithm(new Domain.Entities.ExecutedAlgorithm()
+                                    await executedAlgorithmsRepository.AddExecudedAlgorithm(new Domain.Entities.ExecutedAlgorithm()
                                     {
                                         Date = DateOnly.FromDateTime(DateTime.Now),
                                         TestedAlgorithmId = algorithm.Id,
