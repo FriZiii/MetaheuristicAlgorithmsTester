@@ -7,10 +7,30 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
 {
     public class ExecutedAlgorithmsRepository(Context context) : IExecutedAlgorithmsRepository
     {
-        public async Task AddExecudedAlgorithm(ExecutedAlgorithm executedAlgorithm)
+        public async Task<int> AddExecudedAlgorithm(ExecutedAlgorithm executedAlgorithm)
         {
             context.ExecutedAlgorithms.Add(executedAlgorithm);
             await context.SaveChangesAsync();
+            return executedAlgorithm.Id;
+        }
+
+        public async Task UpdateExecutedAlgorithm(int id, ExecutedAlgorithm updatedExecutedAlgorithm)
+        {
+            var existingExecutedAlgorithm = await context.ExecutedAlgorithms.FindAsync(id);
+
+            if (existingExecutedAlgorithm != null)
+            {
+                existingExecutedAlgorithm.FBest = updatedExecutedAlgorithm.FBest;
+                existingExecutedAlgorithm.XBest = updatedExecutedAlgorithm.XBest;
+                existingExecutedAlgorithm.NumberOfEvaluationFitnessFunction = updatedExecutedAlgorithm.NumberOfEvaluationFitnessFunction;
+                existingExecutedAlgorithm.IsFailed = updatedExecutedAlgorithm.IsFailed;
+                await context.SaveChangesAsync();
+            }
+            else
+            {
+                // Obsłuż sytuację, gdy obiekt o podanym Id nie istnieje
+                throw new InvalidOperationException($"ExecutedAlgorithm o Id {id} nie został znaleziony.");
+            }
         }
 
         public async Task<ExecutedAlgorithm?> GetExecutedAlgorithmById(int algorithmId)

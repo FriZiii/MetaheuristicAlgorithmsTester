@@ -24,10 +24,9 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
         public async Task<AlgorithmTestResult> Handle(ContinueTestSingleAlgorithm request, CancellationToken cancellationToken)
         {
             var executed = await executedAlgorithmsRepository.GetExecutedAlgorithmById(request.ExecutedId);
-
             var algorithm = await algorithmsRepository.GetAlgorithmById(executed.TestedAlgorithmId);
             var fitnessFunction = await fitnessFunctionRepository.GetFitnessFunctionById(executed.TestedFitnessFunctionId);
-            executedId = await executedAlgorithmsRepository.GetCurrentExecutedId();
+            executedId = executed.Id;
             executedStateFileName = $"{algorithm.Name}-{DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss")}";
 
             if (algorithm == null || algorithm.DllFileBytes == null)
@@ -81,24 +80,19 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                     {
                                         //LoadState
                                         var state = await algorithmStateRepository.GetState(executed.Id);
-                                        PropertyInfo stateReaderProperty = algorithmType!.GetProperty("StateReader")!;
-                                        object stateReaderInstance = stateReaderProperty!.GetValue(algorithmInstance)!;
-                                        MethodInfo LoadStateMethod = stateReaderProperty!.PropertyType.GetMethod("LoadState")!;
-                                        string loadedState = (string)LoadStateMethod!.Invoke(stateReaderInstance, [state])!;
 
-                                        //Test
-                                        PropertyInfo stateWriterProperty = algorithmType!.GetProperty("StateWriter")!;
-                                        object stateWriterInstance = stateWriterProperty!.GetValue(algorithmInstance)!;
-                                        MethodInfo getCurrentStateMethod = stateWriterProperty!.PropertyType.GetMethod("GetCurrentState")!;
-                                        string algorithmState = (string)getCurrentStateMethod!.Invoke(stateWriterInstance, null)!;
-
-                                        //Execute method
-                                        method.Invoke(algorithmInstance, methodArgs);
+                                        PropertyInfo stateReaderProperty = algorithmType.GetProperty("StateReader")!;
+                                        object stateReaderInstance = stateReaderProperty.GetValue(algorithmInstance)!;
+                                        MethodInfo loadStateMethod = stateReaderInstance.GetType().GetMethod("LoadState")!;
+                                        loadStateMethod.Invoke(stateReaderInstance, new object[] { state });
 
                                         //Run timer
                                         timer = new System.Timers.Timer((int)executed.TimerFrequency!);
                                         timer.Elapsed += SaveAlgorithState;
                                         timer.Start();
+
+                                        //Execute methodSystem.Reflection.TargetInvocationException: „Exception has been thrown by the target of an invocation.”
+                                        method.Invoke(algorithmInstance, methodArgs);
 
                                         //Set results
                                         xBestValue = (double[])xBestProperty!.GetValue(algorithmInstance)!;
@@ -113,7 +107,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                         numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty!.GetValue(algorithmInstance)!;
                                         executedSuccessfullyValue = (bool)executedSuccessfullyProperty!.GetValue(algorithmInstance)!;
 
-                                        await executedAlgorithmsRepository.AddExecudedAlgorithm(new Domain.Entities.ExecutedAlgorithm()
+                                        await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedAlgorithm()
                                         {
                                             Date = DateOnly.FromDateTime(DateTime.Now),
                                             TestedAlgorithmId = algorithm.Id,
@@ -124,7 +118,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                             NumberOfEvaluationFitnessFunction = numberOfEvaluationFitnessFunctionValue,
                                             FBest = fBestValue,
                                             XBest = xBestValue,
-                                            IsFailed = executedSuccessfullyValue,
+                                            IsFailed = !executedSuccessfullyValue,
                                             AlgorithmStateFileName = executedStateFileName,
                                         });
 
@@ -132,10 +126,11 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                     }
                                     finally
                                     {
-                                        timer.Dispose();
+                                        if (timer != null)
+                                            timer.Dispose();
                                     }
 
-                                    await executedAlgorithmsRepository.AddExecudedAlgorithm(new Domain.Entities.ExecutedAlgorithm()
+                                    await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedAlgorithm()
                                     {
                                         Date = DateOnly.FromDateTime(DateTime.Now),
                                         TestedAlgorithmId = algorithm.Id,
@@ -146,7 +141,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                         NumberOfEvaluationFitnessFunction = numberOfEvaluationFitnessFunctionValue,
                                         FBest = fBestValue,
                                         XBest = xBestValue!,
-                                        IsFailed = executedSuccessfullyValue,
+                                        IsFailed = !executedSuccessfullyValue,
                                         AlgorithmStateFileName = executedStateFileName,
                                     });
 
@@ -186,7 +181,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
             string algorithmState = (string)getCurrentStateMethod!.Invoke(stateWriterInstance, null)!;
             if (!string.IsNullOrEmpty(algorithmState) && algorithmState != currentState)
             {
-                await algorithmStateRepository.SaveState(algorithmState, executedId, executedStateFileName);
+                await algorithmStateRepository.SaveState(algorithmState, executedStateFileName);
                 currentState = algorithmState;
             }
         }
