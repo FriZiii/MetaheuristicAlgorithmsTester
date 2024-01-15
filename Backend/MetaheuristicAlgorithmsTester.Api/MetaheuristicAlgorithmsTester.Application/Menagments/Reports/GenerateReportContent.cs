@@ -14,6 +14,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
                 //raport ale bez ParamName i description
                 StringBuilder htmlBuilder = new StringBuilder();
                 htmlBuilder.AppendLine("<head>\r\n    <style>\r\n        body {\r\n            font-family: Arial, Helvetica, sans-serif;\r\n            display: flex;\r\n            flex-direction: column;\r\n            align-items: center;\r\n        }\r\n        .container {\r\n            background-color: rgba(104, 158, 222, 0.42);\r\n            padding: 10px;\r\n            margin: 10px;\r\n            width: 450px;\r\n        }\r\n        h4{\r\n            font-size: 15px;\r\n            font-weight: 100;\r\n            margin: 0;\r\n        }\r\n        h3{\r\n            margin: 0 0 10 0;\r\n            font-size: 30px;\r\n        }\r\n        p{\r\n            margin: 0;\r\n            font-size:18px;\r\n        }\r\n        li{\r\n            list-style-type: decimal;\r\n            font-size: 14px;\r\n            margin-left: 10;\r\n            font-size: 20px;\r\n            margin-bottom: 3px;\r\n        }\r\n    </style>\r\n</head>");
+
                 htmlBuilder.AppendLine($"<body>");
                 htmlBuilder.AppendLine($"<h1>Test of single algorithm  -  {executedAlgorithm.Date}</h1>");
                 htmlBuilder.AppendLine($"<h2>Execution time  -  execution time</h2>");

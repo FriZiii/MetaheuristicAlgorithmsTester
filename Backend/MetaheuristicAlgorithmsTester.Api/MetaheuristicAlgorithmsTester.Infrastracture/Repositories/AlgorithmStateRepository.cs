@@ -36,7 +36,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
             return string.Empty;
         }
 
-        public async Task SaveState(string state, int executedId, string fileName)
+        public async Task SaveState(string state, string fileName)
         {
             try
             {
