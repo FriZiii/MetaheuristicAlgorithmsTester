@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Reflection.Metadata;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
 {
@@ -168,5 +169,25 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
                 return htmlBuilder.ToString();
             }
         }
+
+        public static string GenerateJsonContentOfSingleAlgorithmTest(ExecutedAlgorithm executedAlgorithm, FitnessFunction? fitnessFunction)
+        {
+            string json = "";
+            json += JsonConvert.SerializeObject(executedAlgorithm, Formatting.Indented );
+            json += JsonConvert.SerializeObject(fitnessFunction, Formatting.Indented);
+            return json;
+        }
+
+        public static string GenerateJsonContentOfMultipleAlgorithmsTest(List<ExecutedAlgorithm> executedAlgorithms, FitnessFunction fitnessFunction)
+        {
+            string json = "";
+            foreach (var algorithm in executedAlgorithms)
+            {
+                json += JsonConvert.SerializeObject(algorithm, Formatting.Indented);
+            }
+            json += JsonConvert.SerializeObject(fitnessFunction, Formatting.Indented);
+            return json;
+        }
+
     }
 }
