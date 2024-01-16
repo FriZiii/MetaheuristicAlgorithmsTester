@@ -6,6 +6,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
     {
         public List<TestAlgorithmDto> Algorithms { get; set; }
         public int FitnessFunctionID { get; set; }
+        public int Depth { get; set; }
     }
 
     public class TestAlgorithmDto
