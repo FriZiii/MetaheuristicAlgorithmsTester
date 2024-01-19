@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Reflection.Metadata;
 using System.Text;
 using Newtonsoft.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
 {
@@ -170,23 +171,59 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
             }
         }
 
-        public static string GenerateJsonContentOfSingleAlgorithmTest(ExecutedAlgorithm executedAlgorithm, FitnessFunction? fitnessFunction)
+        public static string GenerateTxtContentOfSingleAlgorithmTest(ExecutedAlgorithm executedAlgorithm, Algorithm? algorithm, FitnessFunction? fitnessFunction)
         {
-            string json = "";
-            json += JsonConvert.SerializeObject(executedAlgorithm, Formatting.Indented );
-            json += JsonConvert.SerializeObject(fitnessFunction, Formatting.Indented);
-            return json;
+
+            string report = "";
+            report += $"Test of single algorithm -  {executedAlgorithm.Date} \n";
+            report += $"Tested Algorithm -  {executedAlgorithm.TestedAlgorithmName} \n";
+            report += $"Parameters:  {executedAlgorithm.TestedAlgorithmName} \n";
+            if (executedAlgorithm.Parameters.Count() == algorithm.Parameters.Count())
+            {
+                for (int i = 0; i < executedAlgorithm.Parameters.Count; i++)
+                {
+                    report += $"{algorithm.Parameters[i].Name}: {executedAlgorithm.Parameters[i]} - {algorithm.Parameters[i].Description} \n";
+                }
+            }
+            report += $"Fitness Function:  {executedAlgorithm.TestedFitnessFunctionName} \n";
+            report += $"Number of parameters:   {executedAlgorithm.XBest.Count()} \n";
+            report += $"Number of evaluation of fitness function:  {executedAlgorithm.NumberOfEvaluationFitnessFunction} \n";
+            report += $"Fitness Function Value:  {executedAlgorithm.FBest} \n";
+            report += $"Best X Values: \n";
+            foreach (var x in executedAlgorithm.XBest)
+            {
+                report += $"{x} \n";
+            }
+
+            return report;
         }
 
-        public static string GenerateJsonContentOfMultipleAlgorithmsTest(List<ExecutedAlgorithm> executedAlgorithms, FitnessFunction fitnessFunction)
+        public static string GenerateTxtContentOfMultipleAlgorithmsTest(List<ExecutedAlgorithm> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
         {
-            string json = "";
-            foreach (var algorithm in executedAlgorithms)
+            string report = "";
+            for (int i = 0; i < executedAlgorithms.Count; i++)
             {
-                json += JsonConvert.SerializeObject(algorithm, Formatting.Indented);
+                report += $"Test of single algorithm -  {executedAlgorithms[i].Date} \n";
+                report += $"Tested Algorithm -  {executedAlgorithms[i].TestedAlgorithmName} \n";
+                report += $"Parameters:  {executedAlgorithms[i].TestedAlgorithmName} \n";
+                if (executedAlgorithms[i].Parameters.Count() == algorithms[i].Parameters.Count())
+                {
+                    for (int j = 0; j < executedAlgorithms[j].Parameters.Count; j++)
+                    {
+                        report += $"{algorithms[i].Parameters[j].Name}: {executedAlgorithms[i].Parameters[j]} - {algorithms[i].Parameters[j].Description} \n";
+                    }
+                }
+                report += $"Fitness Function:  {executedAlgorithms[i].TestedFitnessFunctionName} \n";
+                report += $"Number of parameters:   {executedAlgorithms[i].XBest.Count()} \n";
+                report += $"Number of evaluation of fitness function:  {executedAlgorithms[i].NumberOfEvaluationFitnessFunction} \n";
+                report += $"Fitness Function Value:  {executedAlgorithms[i].FBest} \n";
+                report += $"Best X Values: \n";
+                foreach (var x in executedAlgorithms[i].XBest)
+                {
+                    report += $"{x} \n";
+                }
             }
-            json += JsonConvert.SerializeObject(fitnessFunction, Formatting.Indented);
-            return json;
+            return report;
         }
 
     }
