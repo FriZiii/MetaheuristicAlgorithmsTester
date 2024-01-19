@@ -29,6 +29,9 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.FitnessFunctions.
                 {
                     if (typeof(IFitnessFunction).IsAssignableFrom(type))
                     {
+                        object functionInstance = Activator.CreateInstance(type);
+                        PropertyInfo paramsInfoProperty = type.GetProperty("NumberOfParameters");
+                        fitnessFunction.NumberOfParameters = (int)paramsInfoProperty.GetValue(functionInstance);
                         var result = await fitnessFunctionRepository.AddFitnessFunction(fitnessFunction);
                         if (result != null)
                         {
