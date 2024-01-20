@@ -7,11 +7,11 @@ using System.Text.Json;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports.TxtReports.TxtReportOfMultipleAlgorithms
 {
-    public class TxtReportOfMultipleAlgorithmsHandler(IExecutedAlgorithmsRepository executedAlgorithmsRepository, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository) : IRequestHandler<TxtReportOfMultipleAlgorithms, ReportResult>
+    public class TxtReportOfMultipleAlgorithmsHandler(IExecutedSingleAlgorithmsRepository executedAlgorithmsRepository, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository) : IRequestHandler<TxtReportOfMultipleAlgorithms, ReportResult>
     {
         public async Task<ReportResult> Handle(TxtReportOfMultipleAlgorithms request, CancellationToken cancellationToken)
         {
-            var execudedAlgorithmsData = new List<ExecutedAlgorithm>();
+            var execudedAlgorithmsData = new List<ExecutedSingleAlgorithm>();
             foreach (var executedId in request.ExecutedIds)
             {
                 var tempExecutedData = await executedAlgorithmsRepository.GetExecutedAlgorithmById(executedId);

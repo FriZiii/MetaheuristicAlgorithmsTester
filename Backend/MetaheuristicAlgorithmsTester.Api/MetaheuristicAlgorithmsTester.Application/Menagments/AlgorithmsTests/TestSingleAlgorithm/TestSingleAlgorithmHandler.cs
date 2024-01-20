@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.TestSingleAlgorithm
 {
-    public class TestSingleAlgorithmHandler(IMediator mediator, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository, IExecutedAlgorithmsRepository executedAlgorithmsRepository)
+    public class TestSingleAlgorithmHandler(IMediator mediator, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository, IExecutedSingleAlgorithmsRepository executedAlgorithmsRepository)
         : IRequestHandler<TestSingleAlgorithm, AlgorithmTestResult>
     {
         public async Task<AlgorithmTestResult> Handle(TestSingleAlgorithm request, CancellationToken cancellationToken)
@@ -68,7 +68,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                     double fBestValue = (double)fBestProperty.GetValue(algorithmInstance);
                                     int numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
 
-                                    executedId = await executedAlgorithmsRepository.AddExecudedAlgorithm(new Domain.Entities.ExecutedAlgorithm()
+                                    executedId = await executedAlgorithmsRepository.AddExecudedAlgorithm(new Domain.Entities.ExecutedSingleAlgorithm()
                                     {
                                         Date = DateOnly.FromDateTime(DateTime.Now),
                                         TestedAlgorithmId = algorithm.Id,

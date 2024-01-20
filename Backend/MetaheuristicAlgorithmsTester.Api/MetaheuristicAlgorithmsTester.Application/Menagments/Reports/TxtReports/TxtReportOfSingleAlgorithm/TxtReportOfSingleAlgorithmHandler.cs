@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports.TxtReports.TxtReportOfSingleAlgorithm
 {
-    public class TxtReportOfSingleAlgorithmHandler(IExecutedAlgorithmsRepository executedAlgorithmsRepository, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository) : IRequestHandler<TxtReportOfSingleAlgorithm, ReportResult>
+    public class TxtReportOfSingleAlgorithmHandler(IExecutedSingleAlgorithmsRepository executedAlgorithmsRepository, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository) : IRequestHandler<TxtReportOfSingleAlgorithm, ReportResult>
     {
         public async Task<ReportResult> Handle(TxtReportOfSingleAlgorithm request, CancellationToken cancellationToken)
         {

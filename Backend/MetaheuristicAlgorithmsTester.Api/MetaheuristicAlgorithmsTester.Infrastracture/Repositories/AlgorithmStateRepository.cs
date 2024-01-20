@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
 {
-    public class AlgorithmStateRepository(IExecutedAlgorithmsRepository executedAlgorithmsRepository, BlobServiceClient blobServiceClient, IConfiguration configuration) : IAlgorithmStateRepository
+    public class AlgorithmStateRepository(IExecutedSingleAlgorithmsRepository executedAlgorithmsRepository, BlobServiceClient blobServiceClient, IConfiguration configuration) : IAlgorithmStateRepository
     {
         public async Task<string> GetState(int executedId)
         {

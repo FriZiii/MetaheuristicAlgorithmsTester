@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.StaticFiles;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports.PdfReports.PdfReportOfSingleAlgorithm
 {
-    public class PdfReportOfSingleAlgorithmHandler(IExecutedAlgorithmsRepository executedAlgorithmsRepository, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository) : IRequestHandler<PdfReportOfSingleAlgorithm, ReportResult>
+    public class PdfReportOfSingleAlgorithmHandler(IExecutedSingleAlgorithmsRepository executedAlgorithmsRepository, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository) : IRequestHandler<PdfReportOfSingleAlgorithm, ReportResult>
     {
         public async Task<ReportResult> Handle(PdfReportOfSingleAlgorithm request, CancellationToken cancellationToken)
         {

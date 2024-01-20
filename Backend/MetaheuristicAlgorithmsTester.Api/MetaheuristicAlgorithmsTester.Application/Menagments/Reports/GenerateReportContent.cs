@@ -9,7 +9,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
 {
     public static class GenerateReportContent
     {
-        public static string GeneratePpfContentOfSingleAlgorithmTest(ExecutedAlgorithm executedAlgorithm, Algorithm? algorithm, FitnessFunction? fitnessFunction)
+        public static string GeneratePpfContentOfSingleAlgorithmTest(ExecutedSingleAlgorithm executedAlgorithm, Algorithm? algorithm, FitnessFunction? fitnessFunction)
         {
             if (algorithm == null || fitnessFunction == null)
             {
@@ -82,7 +82,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
             }
         }
 
-        public static string GeneratePpfContentOfMultipleAlgorithmsTest(List<ExecutedAlgorithm> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
+        public static string GeneratePpfContentOfMultipleAlgorithmsTest(List<ExecutedSingleAlgorithm> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
         {
             if (algorithms.Count == executedAlgorithms.Count && algorithms.All(x => x != null) && executedAlgorithms.All(y => y != null))
             {
@@ -171,7 +171,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
             }
         }
 
-        public static string GenerateTxtContentOfSingleAlgorithmTest(ExecutedAlgorithm executedAlgorithm, Algorithm? algorithm, FitnessFunction? fitnessFunction)
+        public static string GenerateTxtContentOfSingleAlgorithmTest(ExecutedSingleAlgorithm executedAlgorithm, Algorithm? algorithm, FitnessFunction? fitnessFunction)
         {
 
             string report = "";
@@ -198,7 +198,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
             return report;
         }
 
-        public static string GenerateTxtContentOfMultipleAlgorithmsTest(List<ExecutedAlgorithm> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
+        public static string GenerateTxtContentOfMultipleAlgorithmsTest(List<ExecutedSingleAlgorithm> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
         {
             string report = "";
             for (int i = 0; i < executedAlgorithms.Count; i++)

@@ -4,6 +4,6 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports.PdfReport
 {
     public class PdfReportOfMultipleAlgorithms : IRequest<ReportResult>
     {
-        public List<int> ExecutedIds { get; set; } = default!;
+        public string ExecutedId { get; set; } = default!;
     }
 }

@@ -9,7 +9,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
     public class TestSingleAlgorithmSafeModeHandler(
         IAlgorithmsRepository algorithmsRepository,
         IFitnessFunctionRepository fitnessFunctionRepository,
-        IExecutedAlgorithmsRepository executedAlgorithmsRepository,
+        IExecutedSingleAlgorithmsRepository executedAlgorithmsRepository,
         IAlgorithmStateRepository algorithmStateRepository
         )
         : IRequestHandler<TestSingleAlgorithmSafeMode, AlgorithmTestResult>
@@ -76,7 +76,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                     try
                                     {
                                         //Add executed
-                                        executedId = await executedAlgorithmsRepository.AddExecudedAlgorithm(new Domain.Entities.ExecutedAlgorithm()
+                                        executedId = await executedAlgorithmsRepository.AddExecudedAlgorithm(new Domain.Entities.ExecutedSingleAlgorithm()
                                         {
                                             Date = DateOnly.FromDateTime(DateTime.Now),
                                             TestedAlgorithmId = algorithm.Id,
@@ -111,7 +111,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                         executedSuccessfullyValue = (bool)executedSuccessfullyProperty!.GetValue(algorithmInstance)!;
 
                                         //UpdateExecuted
-                                        await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedAlgorithm()
+                                        await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedSingleAlgorithm()
                                         {
                                             Date = DateOnly.FromDateTime(DateTime.Now),
                                             TestedAlgorithmId = algorithm.Id,
@@ -136,7 +136,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                     }
 
                                     //UpdateExecuted
-                                    await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedAlgorithm()
+                                    await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedSingleAlgorithm()
                                     {
                                         Date = DateOnly.FromDateTime(DateTime.Now),
                                         TestedAlgorithmId = algorithm.Id,

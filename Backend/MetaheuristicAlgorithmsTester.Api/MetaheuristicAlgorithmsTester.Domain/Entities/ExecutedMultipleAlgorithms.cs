@@ -1,9 +1,11 @@
 ﻿namespace MetaheuristicAlgorithmsTester.Domain.Entities
 {
-    public class ExecutedAlgorithm
+    public class ExecutedMultipleAlgorithms
     {
         public int Id { get; set; }
+        public string MultipleTestId { get; set; } = default!;
         public DateOnly Date { get; set; } = default!;
+
         public int TestedAlgorithmId { get; set; }
         public string TestedAlgorithmName { get; set; } = default!;
 
@@ -15,7 +17,7 @@
         public int? NumberOfEvaluationFitnessFunction { get; set; }
         public List<double> Parameters { get; set; } = default!;
 
-        public bool? IsFailed { get; set; }
+        public bool IsFailed { get; set; }
         public string? AlgorithmStateFileName { get; set; }
         public int? TimerFrequency { get; set; }
     }

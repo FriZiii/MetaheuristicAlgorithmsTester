@@ -1,26 +1,65 @@
 ﻿using AlgorithmInterfaces;
 using MediatR;
+using MetaheuristicAlgorithmsTester.Domain.Entities;
 using MetaheuristicAlgorithmsTester.Domain.Interfaces;
 using System.Reflection;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.TestMultipleAlgorithms
 {
-    public class TestMultipleAlgorithmsHandler(IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository, IMediator mediator) : IRequestHandler<TestMultipleAlgorithms, IEnumerable<AlgorithmTestResult>>
+    public class TestMultipleAlgorithmsHandler(IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository, IMediator mediator, IExecutedMultipleAlgorithmsRepositor executedMultipleAlgorithmsRepositor) : IRequestHandler<TestMultipleAlgorithms, MultipleAlgorithmTestResult>
     {
-        public async Task<IEnumerable<AlgorithmTestResult>> Handle(TestMultipleAlgorithms request, CancellationToken cancellationToken)
+        public async Task<MultipleAlgorithmTestResult> Handle(TestMultipleAlgorithms request, CancellationToken cancellationToken)
         {
-            var result = new AlgorithmTestResult[request.Algorithms.Count];
+            var results = new Result[request.Algorithms.Count];
+            string multipleExecutedId = Guid.NewGuid().ToString("N");
+            DateOnly date = DateOnly.FromDateTime(DateTime.Now);
 
-            for (int i = 0; i < result.Length; i++)
+            try
             {
-                var parameters = await FindBestParameters(request.Algorithms[i].Id, request.FitnessFunctionID, request.Depth, request.Dimension, request.SatisfiedResult);
-                result[i] = await mediator.Send(new TestSingleAlgorithm.TestSingleAlgorithm() { AlgorithmId = request.Algorithms[i].Id, FitnessFunctionID = request.FitnessFunctionID, Parameters = parameters });
+                for (int i = 0; i < results.Length; i++)
+                {
+                    results[i] = await ExecuteWithFindBestParameters(request.Algorithms[i].Id, request.FitnessFunctionID, request.Depth, request.Dimension, request.SatisfiedResult);
+                }
             }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            //Save to db
+            foreach (var algorithmResult in results)
+            {
+                if (algorithmResult != null)
+                {
+                    var x = new ExecutedMultipleAlgorithms()
+                    {
+                        Date = date,
+                        MultipleTestId = multipleExecutedId,
+                        FBest = algorithmResult.FBest,
+                        XBest = algorithmResult.XBest,
+                        TestedAlgorithmId = algorithmResult.TestedAlgorithmId,
+                        TestedFitnessFunctionId = algorithmResult.TestedFitnessFunctionId,
+                        TestedAlgorithmName = algorithmResult.TestedFitnessFunctionName,
+                        TestedFitnessFunctionName = algorithmResult.TestedFitnessFunctionName,
+                        IsFailed = false,
+                        NumberOfEvaluationFitnessFunction = algorithmResult.NumberOfEvaluationFitnessFunction,
+                        Parameters = algorithmResult.Parameters
+                    };
+                    await executedMultipleAlgorithmsRepositor.AddExecudedAlgorithm(x);
+                }
+            }
+            var executedAlgorithms = await executedMultipleAlgorithmsRepositor.GetExecutedAlgorithmsByExecutedId(multipleExecutedId);
+
+            var result = new MultipleAlgorithmTestResult()
+            {
+                MultipleExecutedId = multipleExecutedId,
+                ExecutedAlgorithms = executedAlgorithms
+            };
 
             return result;
         }
 
-        public async Task<List<double>> FindBestParameters(int algorithmId, int fitnessFunctionId, int depth, int dimension, double satisfiedResult)
+        public async Task<Result> ExecuteWithFindBestParameters(int algorithmId, int fitnessFunctionId, int depth, int dimension, double satisfiedResult)
         {
             var algorithm = await algorithmsRepository.GetAlgorithmById(algorithmId);
             var fitnessFunction = await fitnessFunctionRepository.GetFitnessFunctionById(fitnessFunctionId);
@@ -53,36 +92,60 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                             {
                                 object fitnessFunctionInstance = Activator.CreateInstance(fitnessFunctionType);
 
+                                var currentParameter = new List<double>();
                                 try
                                 {
                                     List<List<double>> parameterCombinations = GenerateVariance(depth, algorithm.Parameters.ToArray(), algorithm.Parameters.Count - 1);
-                                    List<BestParameters> tempResult = new List<BestParameters>();
+                                    Result lastResult = new Result();
                                     foreach (var parameters in parameterCombinations)
                                     {
+                                        currentParameter = parameters;
                                         List<double> resultParametes = [.. parameters, dimension];
                                         object[] methodArgs = [fitnessFunctionInstance, resultParametes.ToArray()];
                                         method.Invoke(algorithmInstance, methodArgs);
+
+                                        PropertyInfo xBestProperty = algorithmType.GetProperty("XBest");
                                         PropertyInfo fBestProperty = algorithmType.GetProperty("FBest");
+                                        PropertyInfo numberOfEvaluationFitnessFunctionProperty = algorithmType.GetProperty("NumberOfEvaluationFitnessFunction");
+
+                                        double[] xBestValue = (double[])xBestProperty.GetValue(algorithmInstance);
                                         double fBestValue = (double)fBestProperty.GetValue(algorithmInstance);
+                                        int numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
 
                                         if (fBestValue <= satisfiedResult)
                                         {
-                                            return resultParametes;
+                                            return new Result()
+                                            {
+                                                TestedAlgorithmId = algorithm.Id,
+                                                TestedAlgorithmName = algorithm.Name,
+                                                TestedFitnessFunctionId = fitnessFunction.Id,
+                                                TestedFitnessFunctionName = fitnessFunction.Name,
+                                                FBest = fBestValue,
+                                                XBest = xBestValue,
+                                                Parameters = resultParametes,
+                                                NumberOfEvaluationFitnessFunction = numberOfEvaluationFitnessFunctionValue,
+                                            };
                                         }
                                         else
                                         {
-                                            tempResult.Add(new BestParameters()
+                                            if (lastResult.FBest > fBestValue)
                                             {
-                                                FBest = fBestValue,
-                                                Parameters = resultParametes.ToArray(),
-                                            });
+                                                lastResult.TestedAlgorithmId = algorithm.Id;
+                                                lastResult.TestedAlgorithmName = algorithm.Name;
+                                                lastResult.TestedFitnessFunctionId = fitnessFunction.Id;
+                                                lastResult.TestedFitnessFunctionName = fitnessFunction.Name;
+                                                lastResult.Parameters = resultParametes;
+                                                lastResult.XBest = xBestValue;
+                                                lastResult.FBest = fBestValue;
+                                                lastResult.NumberOfEvaluationFitnessFunction = numberOfEvaluationFitnessFunctionValue;
+                                            }
                                         }
                                     }
-                                    tempResult = tempResult.OrderBy(bp => bp.FBest).ToList();
-                                    return tempResult[0].Parameters.ToList();
+                                    return lastResult;
                                 }
                                 catch (Exception ex)
                                 {
+                                    var x = currentParameter;
                                     throw new Exception($"Something went wrong: {ex.Message}");
                                 }
                             }
@@ -98,8 +161,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
         public static List<List<double>> GenerateVariance(int depth, Domain.Entities.ParamInfo[] paramsInfo, int numbOfParams)
         {
             var x = GenerateParameterPossibleValues(depth, paramsInfo, numbOfParams).ToList();
-            var y = GenerateParameterCombinations(x);
-            return y;
+            return GenerateParameterCombinations(x);
         }
         private static List<List<double>> GenerateParameterPossibleValues(int depth, Domain.Entities.ParamInfo[] paramsInfo, int numbOfParams)
         {
@@ -126,15 +188,12 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
             }
             return possibleValues;
         }
-
-        #region chat
         static List<List<double>> GenerateParameterCombinations(List<List<double>> inputParameters)
         {
             List<List<double>> outputCombinations = new List<List<double>>();
             GenerateCombinations(inputParameters, 0, new List<double>(), outputCombinations);
             return outputCombinations;
         }
-
         static void GenerateCombinations(List<List<double>> inputParameters, int currentIndex, List<double> currentCombination, List<List<double>> outputCombinations)
         {
             if (currentIndex == inputParameters.Count)
@@ -150,11 +209,18 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                 currentCombination.RemoveAt(currentCombination.Count - 1);
             }
         }
-        #endregion
     }
-    class BestParameters
+    public class Result
     {
+        public int TestedAlgorithmId { get; set; }
+        public string TestedAlgorithmName { get; set; } = default!;
+
+        public int TestedFitnessFunctionId { get; set; }
+        public string TestedFitnessFunctionName { get; set; } = default!;
+        public double[]? XBest { get; set; }
         public double FBest { get; set; }
-        public double[] Parameters { get; set; }
+        public List<double> Parameters { get; set; }
+
+        public int NumberOfEvaluationFitnessFunction { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MetaheuristicAlgorithmsTester.Application.Menagments.Algorithms;
 using MetaheuristicAlgorithmsTester.Application.Menagments.Algorithms.AddAlgorithm;
-using MetaheuristicAlgorithmsTester.Application.Menagments.ExecutedAlgotrithms;
+using MetaheuristicAlgorithmsTester.Application.Menagments.SingleExecutedAlgotrithms;
 using MetaheuristicAlgorithmsTester.Application.Menagments.FitnessFunctions;
 using MetaheuristicAlgorithmsTester.Application.Menagments.FitnessFunctions.AddFitnessFunction;
 using MetaheuristicAlgorithmsTester.Domain.Entities;
@@ -23,7 +23,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Mappings
 
             CreateMap<AlgorithmInterfaces.ParamInfo, Domain.Entities.ParamInfo>();
 
-            CreateMap<ExecutedAlgorithm, ExecutedAlgorithmDto>();
+            CreateMap<ExecutedSingleAlgorithm, SingleExecutedAlgorithmDto>();
         }
     }
 }

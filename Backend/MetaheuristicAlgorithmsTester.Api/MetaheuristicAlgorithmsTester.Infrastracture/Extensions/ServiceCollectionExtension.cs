@@ -14,7 +14,8 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Extensions
         {
             services.AddScoped<IAlgorithmsRepository, AlgorithmsRepository>();
             services.AddScoped<IFitnessFunctionRepository, FitnessFunctionRepository>();
-            services.AddScoped<IExecutedAlgorithmsRepository, ExecutedAlgorithmsRepository>();
+            services.AddScoped<IExecutedMultipleAlgorithmsRepositor, ExecutedMultipleAlgorithmsRepositor>();
+            services.AddScoped<IExecutedSingleAlgorithmsRepository, ExecutedSingleAlgorithmsRepository>();
             services.AddScoped<IAlgorithmStateRepository, AlgorithmStateRepository>();
 
             services.AddDbContext<Context>(options =>

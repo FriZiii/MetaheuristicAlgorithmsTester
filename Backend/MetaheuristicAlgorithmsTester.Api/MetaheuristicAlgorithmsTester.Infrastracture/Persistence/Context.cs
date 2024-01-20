@@ -12,7 +12,8 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Persistence
         }
 
 
-        public DbSet<ExecutedAlgorithm> ExecutedAlgorithms { get; set; }
+        public DbSet<ExecutedMultipleAlgorithms> ExecutedMultipleAlgorithms { get; set; }
+        public DbSet<ExecutedSingleAlgorithm> ExecutedSingleAlgorithms { get; set; }
         public DbSet<Algorithm> Algorithms { get; set; } = null!;
         public DbSet<ParamInfo> Parameters { get; set; }
         public DbSet<FitnessFunction> FitnessFunctions { get; set; } = null!;

@@ -2,7 +2,7 @@
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.TestMultipleAlgorithms
 {
-    public class TestMultipleAlgorithms : IRequest<IEnumerable<AlgorithmTestResult>>
+    public class TestMultipleAlgorithms : IRequest<MultipleAlgorithmTestResult>
     {
         public List<TestAlgorithmDto> Algorithms { get; set; }
         public int FitnessFunctionID { get; set; }

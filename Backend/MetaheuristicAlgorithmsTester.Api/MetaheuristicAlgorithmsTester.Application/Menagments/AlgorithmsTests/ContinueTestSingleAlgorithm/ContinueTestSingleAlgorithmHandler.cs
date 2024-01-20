@@ -10,7 +10,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
         (
         IAlgorithmsRepository algorithmsRepository,
         IFitnessFunctionRepository fitnessFunctionRepository,
-        IExecutedAlgorithmsRepository executedAlgorithmsRepository,
+        IExecutedSingleAlgorithmsRepository executedAlgorithmsRepository,
         IAlgorithmStateRepository algorithmStateRepository
         )
         : IRequestHandler<ContinueTestSingleAlgorithm, AlgorithmTestResult>
@@ -107,7 +107,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                         numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty!.GetValue(algorithmInstance)!;
                                         executedSuccessfullyValue = (bool)executedSuccessfullyProperty!.GetValue(algorithmInstance)!;
 
-                                        await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedAlgorithm()
+                                        await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedSingleAlgorithm()
                                         {
                                             Date = DateOnly.FromDateTime(DateTime.Now),
                                             TestedAlgorithmId = algorithm.Id,
@@ -130,7 +130,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                             timer.Dispose();
                                     }
 
-                                    await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedAlgorithm()
+                                    await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedSingleAlgorithm()
                                     {
                                         Date = DateOnly.FromDateTime(DateTime.Now),
                                         TestedAlgorithmId = algorithm.Id,

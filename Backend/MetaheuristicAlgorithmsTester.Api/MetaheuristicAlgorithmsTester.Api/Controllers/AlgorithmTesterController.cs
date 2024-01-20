@@ -57,14 +57,15 @@ namespace MetaheuristicAlgorithmsTester.Api.Controllers
         [HttpPost("TestMultipleAlgorithms")]
         public async Task<IActionResult> TestMultipleAlgorithms(TestMultipleAlgorithms testMultipleAlgorithms)
         {
-            var result = await mediator.Send(testMultipleAlgorithms);
-            if (result.All(x => x.IsSuccesfull))
+            try
             {
+                var result = await mediator.Send(testMultipleAlgorithms);
                 return Ok(result);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex);
+                throw;
             }
         }
     }
