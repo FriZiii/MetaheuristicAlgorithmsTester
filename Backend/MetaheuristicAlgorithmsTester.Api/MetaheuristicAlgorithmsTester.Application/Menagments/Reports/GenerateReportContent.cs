@@ -1,9 +1,5 @@
 ﻿using MetaheuristicAlgorithmsTester.Domain.Entities;
-using System.ComponentModel;
-using System.Reflection.Metadata;
 using System.Text;
-using Newtonsoft.Json;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
 {
@@ -56,7 +52,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
                 htmlBuilder.AppendLine($"<h4>Tested Algorithm</h4>");
                 htmlBuilder.AppendLine($"<h3>{executedAlgorithm.TestedAlgorithmName}</h3>");
                 htmlBuilder.AppendLine($"<p>Parameters: </p>");
-                if(executedAlgorithm.Parameters.Count() == algorithm.Parameters.Count())
+                if (executedAlgorithm.Parameters.Count() == algorithm.Parameters.Count())
                 {
                     for (int i = 0; i < executedAlgorithm.Parameters.Count; i++)
                     {
@@ -82,18 +78,17 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
             }
         }
 
-        public static string GeneratePpfContentOfMultipleAlgorithmsTest(List<ExecutedSingleAlgorithm> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
+        public static string GeneratePpfContentOfMultipleAlgorithmsTest(List<ExecutedMultipleAlgorithms> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
         {
             if (algorithms.Count == executedAlgorithms.Count && algorithms.All(x => x != null) && executedAlgorithms.All(y => y != null))
             {
-                //TODO: zwróc raport
                 StringBuilder htmlBuilder = new StringBuilder();
 
-                for (int i =0; i < executedAlgorithms.Count; i++)
+                for (int i = 0; i < executedAlgorithms.Count; i++)
                 {
                     htmlBuilder.AppendLine("<head>\r\n    <style>\r\n        body {\r\n            font-family: Arial, Helvetica, sans-serif;\r\n            display: flex;\r\n            flex-direction: column;\r\n            align-items: center;\r\n        }\r\n        .container {\r\n            background-color: rgba(104, 158, 222, 0.42);\r\n            padding: 10px;\r\n            margin: 10px;\r\n            width: 450px;\r\n        }\r\n        h4{\r\n            font-size: 15px;\r\n            font-weight: 100;\r\n            margin: 0;\r\n        }\r\n        h3{\r\n            margin: 0 0 10 0;\r\n            font-size: 30px;\r\n        }\r\n        p{\r\n            margin: 0;\r\n            font-size:18px;\r\n        }\r\n        li{\r\n            list-style-type: decimal;\r\n            font-size: 14px;\r\n            margin-left: 10;\r\n            font-size: 20px;\r\n            margin-bottom: 3px;\r\n        }\r\n    \r\n        hr{\r\n            width: 500px;\r\n        }</style>\r\n</head>");
                     htmlBuilder.AppendLine($"<body>");
-                    htmlBuilder.AppendLine($"<h1>Test of single algorithm  -  {executedAlgorithms[i].Date}</h1>");
+                    htmlBuilder.AppendLine($"<h1>Test of multiple algorithm  -  {executedAlgorithms[i].Date}</h1>");
                     htmlBuilder.AppendLine($"<h2>Execution time  -  execution time</h2>");
                     htmlBuilder.AppendLine($"<div class=\"container\">");
                     htmlBuilder.AppendLine($"<h4>Tested Algorithm</h4>");
@@ -130,14 +125,13 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
             }
             else
             {
-                //TODO: zwróc raport ale bez ParamName i description
                 StringBuilder htmlBuilder = new StringBuilder();
 
                 for (int i = 0; i < executedAlgorithms.Count; i++)
                 {
                     htmlBuilder.AppendLine("<head>\r\n    <style>\r\n        body {\r\n            font-family: Arial, Helvetica, sans-serif;\r\n            display: flex;\r\n            flex-direction: column;\r\n            align-items: center;\r\n        }\r\n        .container {\r\n            background-color: rgba(104, 158, 222, 0.42);\r\n            padding: 10px;\r\n            margin: 10px;\r\n            width: 450px;\r\n        }\r\n        h4{\r\n            font-size: 15px;\r\n            font-weight: 100;\r\n            margin: 0;\r\n        }\r\n        h3{\r\n            margin: 0 0 10 0;\r\n            font-size: 30px;\r\n        }\r\n        p{\r\n            margin: 0;\r\n            font-size:18px;\r\n        }\r\n        li{\r\n            list-style-type: decimal;\r\n            font-size: 14px;\r\n            margin-left: 10;\r\n            font-size: 20px;\r\n            margin-bottom: 3px;\r\n        }\r\n    \r\n        hr{\r\n            width: 500px;\r\n        }</style>\r\n</head>");
                     htmlBuilder.AppendLine($"<body>");
-                    htmlBuilder.AppendLine($"<h1>Test of single algorithm  -  {executedAlgorithms[i].Date}</h1>");
+                    htmlBuilder.AppendLine($"<h1>Test of multiple algorithm  -  {executedAlgorithms[i].Date}</h1>");
                     htmlBuilder.AppendLine($"<h2>Execution time  -  execution time</h2>");
                     htmlBuilder.AppendLine($"<div class=\"container\">");
                     htmlBuilder.AppendLine($"<h4>Tested Algorithm</h4>");

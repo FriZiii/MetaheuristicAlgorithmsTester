@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
 {
-    public class ExecutedMultipleAlgorithmsRepositor(Context context) : IExecutedMultipleAlgorithmsRepositor
+    public class ExecutedMultipleAlgorithmsRepository(Context context) : IExecutedMultipleAlgorithmsRepository
     {
         public async Task<int> AddExecudedAlgorithm(ExecutedMultipleAlgorithms executedAlgorithm)
         {
@@ -20,15 +20,29 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
         public async Task<List<ExecutedMultipleAlgorithms?>> GetExecutedAlgorithmsByExecutedId(string executedId)
             => await context.ExecutedMultipleAlgorithms.Where(a => a.MultipleTestId == executedId).ToListAsync();
 
+        public async Task<ExecutedMultipleAlgorithms?> GetExecutedAlgorithmById(int id)
+            => await context.ExecutedMultipleAlgorithms.FirstOrDefaultAsync(a => a.Id == id);
+
         public async Task UpdateExecutedAlgorithm(int id, ExecutedMultipleAlgorithms updatedExecutedAlgorithm)
         {
             var existingExecutedAlgorithm = await context.ExecutedMultipleAlgorithms.FindAsync(id);
 
             if (existingExecutedAlgorithm != null)
             {
+                existingExecutedAlgorithm.AlgorithmStateFileName = updatedExecutedAlgorithm.AlgorithmStateFileName;
+
+                existingExecutedAlgorithm.TestedAlgorithmName = updatedExecutedAlgorithm.TestedAlgorithmName;
+                existingExecutedAlgorithm.TestedFitnessFunctionName = updatedExecutedAlgorithm.TestedFitnessFunctionName;
+
+                existingExecutedAlgorithm.Date = updatedExecutedAlgorithm.Date;
+                existingExecutedAlgorithm.TimerFrequency = updatedExecutedAlgorithm.TimerFrequency;
+                existingExecutedAlgorithm.Dimension = updatedExecutedAlgorithm.Dimension;
+
+                existingExecutedAlgorithm.Parameters = updatedExecutedAlgorithm.Parameters;
                 existingExecutedAlgorithm.FBest = updatedExecutedAlgorithm.FBest;
                 existingExecutedAlgorithm.XBest = updatedExecutedAlgorithm.XBest;
                 existingExecutedAlgorithm.NumberOfEvaluationFitnessFunction = updatedExecutedAlgorithm.NumberOfEvaluationFitnessFunction;
+
                 existingExecutedAlgorithm.IsFailed = updatedExecutedAlgorithm.IsFailed;
                 await context.SaveChangesAsync();
             }

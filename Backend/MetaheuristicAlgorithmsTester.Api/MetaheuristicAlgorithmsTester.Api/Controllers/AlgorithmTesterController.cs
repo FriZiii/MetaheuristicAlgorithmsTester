@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.ContinueTestMultipleAlgorithms;
 using MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.ContinueTestSingleAlgorithm;
 using MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.TestMultipleAlgorithms;
+using MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.TestMultipleAlgorithmsSafeMode;
 using MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.TestSingleAlgorithm;
 using MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.TestSingleAlgorithmSafeMode;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +55,20 @@ namespace MetaheuristicAlgorithmsTester.Api.Controllers
             }
         }
 
+        [HttpPost("ContinueTestMultipleAlgorithm")]
+        public async Task<IActionResult> ContinueTestMultipleAlgorithm(ContinueTestMultipleAlgorithms continueTestMultipleAlgorithms)
+        {
+            try
+            {
+                var result = await mediator.Send(continueTestMultipleAlgorithms);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpPost("TestMultipleAlgorithms")]
         public async Task<IActionResult> TestMultipleAlgorithms(TestMultipleAlgorithms testMultipleAlgorithms)
@@ -60,6 +76,21 @@ namespace MetaheuristicAlgorithmsTester.Api.Controllers
             try
             {
                 var result = await mediator.Send(testMultipleAlgorithms);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+                throw;
+            }
+        }
+
+        [HttpPost("TestMultipleAlgorithmsSafeMode")]
+        public async Task<IActionResult> TestMultipleAlgorithmsSafeMode(TestMultipleAlgorithmsSafeMode testMultipleAlgorithmsSafeMode)
+        {
+            try
+            {
+                var result = await mediator.Send(testMultipleAlgorithmsSafeMode);
                 return Ok(result);
             }
             catch (Exception ex)

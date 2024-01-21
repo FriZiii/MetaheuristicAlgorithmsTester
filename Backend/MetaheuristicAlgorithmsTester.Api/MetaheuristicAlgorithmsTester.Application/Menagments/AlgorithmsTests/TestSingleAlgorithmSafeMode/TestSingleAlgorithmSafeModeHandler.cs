@@ -68,8 +68,8 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                     PropertyInfo numberOfEvaluationFitnessFunctionProperty = algorithmType.GetProperty("NumberOfEvaluationFitnessFunction")!;
                                     PropertyInfo executedSuccessfullyProperty = algorithmType.GetProperty("ExecutedSuccessfully")!;
 
-                                    double[] xBestValue;
-                                    double fBestValue;
+                                    double?[] xBestValue;
+                                    double? fBestValue;
                                     int numberOfEvaluationFitnessFunctionValue;
                                     bool executedSuccessfullyValue;
 
@@ -98,15 +98,15 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                         method.Invoke(algorithmInstance, methodArgs);
 
                                         //Assign values
-                                        xBestValue = (double[])xBestProperty!.GetValue(algorithmInstance)!;
+                                        xBestValue = (double?[])xBestProperty!.GetValue(algorithmInstance)!;
                                         fBestValue = (double)fBestProperty!.GetValue(algorithmInstance)!;
                                         numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty!.GetValue(algorithmInstance)!;
                                         executedSuccessfullyValue = (bool)executedSuccessfullyProperty!.GetValue(algorithmInstance)!;
                                     }
                                     catch (Exception ex)
                                     {
-                                        xBestValue = (double[])xBestProperty!.GetValue(algorithmInstance)!;
-                                        fBestValue = (double)fBestProperty!.GetValue(algorithmInstance)!;
+                                        xBestValue = (double?[])xBestProperty!.GetValue(algorithmInstance)!;
+                                        fBestValue = (double?)fBestProperty!.GetValue(algorithmInstance)!;
                                         numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty!.GetValue(algorithmInstance)!;
                                         executedSuccessfullyValue = (bool)executedSuccessfullyProperty!.GetValue(algorithmInstance)!;
 

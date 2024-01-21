@@ -64,7 +64,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                     PropertyInfo fBestProperty = algorithmType.GetProperty("FBest");
                                     PropertyInfo numberOfEvaluationFitnessFunctionProperty = algorithmType.GetProperty("NumberOfEvaluationFitnessFunction");
 
-                                    double[] xBestValue = (double[])xBestProperty.GetValue(algorithmInstance);
+                                    double?[] xBestValue = (double?[])xBestProperty.GetValue(algorithmInstance);
                                     double fBestValue = (double)fBestProperty.GetValue(algorithmInstance);
                                     int numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
 

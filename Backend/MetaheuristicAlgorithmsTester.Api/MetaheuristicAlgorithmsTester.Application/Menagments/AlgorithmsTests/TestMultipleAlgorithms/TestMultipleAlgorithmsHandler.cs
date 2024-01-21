@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.TestMultipleAlgorithms
 {
-    public class TestMultipleAlgorithmsHandler(IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository, IMediator mediator, IExecutedMultipleAlgorithmsRepositor executedMultipleAlgorithmsRepositor) : IRequestHandler<TestMultipleAlgorithms, MultipleAlgorithmTestResult>
+    public class TestMultipleAlgorithmsHandler(IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository, IMediator mediator, IExecutedMultipleAlgorithmsRepository executedMultipleAlgorithmsRepositor) : IRequestHandler<TestMultipleAlgorithms, MultipleAlgorithmTestResult>
     {
         public async Task<MultipleAlgorithmTestResult> Handle(TestMultipleAlgorithms request, CancellationToken cancellationToken)
         {
@@ -25,6 +25,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
             {
                 throw ex;
             }
+            results = results.Where(x => x != null).ToArray();
 
             //Save to db
             foreach (var algorithmResult in results)
@@ -39,11 +40,14 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                         XBest = algorithmResult.XBest,
                         TestedAlgorithmId = algorithmResult.TestedAlgorithmId,
                         TestedFitnessFunctionId = algorithmResult.TestedFitnessFunctionId,
-                        TestedAlgorithmName = algorithmResult.TestedFitnessFunctionName,
+                        TestedAlgorithmName = algorithmResult.TestedAlgorithmName,
                         TestedFitnessFunctionName = algorithmResult.TestedFitnessFunctionName,
                         IsFailed = false,
                         NumberOfEvaluationFitnessFunction = algorithmResult.NumberOfEvaluationFitnessFunction,
-                        Parameters = algorithmResult.Parameters
+                        Parameters = algorithmResult.Parameters,
+                        SatisfiedResult = request.SatisfiedResult,
+                        Dimension = request.Dimension,
+                        Depth = request.Depth,
                     };
                     await executedMultipleAlgorithmsRepositor.AddExecudedAlgorithm(x);
                 }
@@ -108,11 +112,11 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                         PropertyInfo fBestProperty = algorithmType.GetProperty("FBest");
                                         PropertyInfo numberOfEvaluationFitnessFunctionProperty = algorithmType.GetProperty("NumberOfEvaluationFitnessFunction");
 
-                                        double[] xBestValue = (double[])xBestProperty.GetValue(algorithmInstance);
+                                        double?[] xBestValue = (double?[])xBestProperty.GetValue(algorithmInstance);
                                         double fBestValue = (double)fBestProperty.GetValue(algorithmInstance);
                                         int numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
 
-                                        if (fBestValue <= satisfiedResult)
+                                        if (fBestValue <= satisfiedResult && fBestValue != null && satisfiedResult != double.NaN)
                                         {
                                             return new Result()
                                             {
@@ -124,6 +128,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                                 XBest = xBestValue,
                                                 Parameters = resultParametes,
                                                 NumberOfEvaluationFitnessFunction = numberOfEvaluationFitnessFunctionValue,
+                                                IsFailed = false
                                             };
                                         }
                                         else
@@ -138,6 +143,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                                 lastResult.XBest = xBestValue;
                                                 lastResult.FBest = fBestValue;
                                                 lastResult.NumberOfEvaluationFitnessFunction = numberOfEvaluationFitnessFunctionValue;
+                                                lastResult.IsFailed = false;
                                             }
                                         }
                                     }
@@ -145,8 +151,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                 }
                                 catch (Exception ex)
                                 {
-                                    var x = currentParameter;
-                                    throw new Exception($"Something went wrong: {ex.Message}");
+                                    return null;
                                 }
                             }
                         }
@@ -217,9 +222,10 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
 
         public int TestedFitnessFunctionId { get; set; }
         public string TestedFitnessFunctionName { get; set; } = default!;
-        public double[]? XBest { get; set; }
-        public double FBest { get; set; }
+        public double?[]? XBest { get; set; }
+        public double? FBest { get; set; }
         public List<double> Parameters { get; set; }
+        public bool IsFailed { get; set; }
 
         public int NumberOfEvaluationFitnessFunction { get; set; }
     }

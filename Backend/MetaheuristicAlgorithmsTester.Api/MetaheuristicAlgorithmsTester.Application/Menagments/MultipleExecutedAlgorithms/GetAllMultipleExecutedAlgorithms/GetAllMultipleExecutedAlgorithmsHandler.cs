@@ -4,7 +4,7 @@ using MetaheuristicAlgorithmsTester.Domain.Interfaces;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.MultipleExecutedAlgorithms.GetAllMultipleExecutedAlgorithms
 {
-    public class GetAllMultipleExecutedAlgorithmsHandler(IExecutedMultipleAlgorithmsRepositor executedMultipleAlgorithmsRepositor) : IRequestHandler<GetAllMultipleExecutedAlgorithms, List<AllMultipleExecutedAlgorithmResult>>
+    public class GetAllMultipleExecutedAlgorithmsHandler(IExecutedMultipleAlgorithmsRepository executedMultipleAlgorithmsRepositor) : IRequestHandler<GetAllMultipleExecutedAlgorithms, List<AllMultipleExecutedAlgorithmResult>>
     {
         public async Task<List<AllMultipleExecutedAlgorithmResult>> Handle(GetAllMultipleExecutedAlgorithms request, CancellationToken cancellationToken)
         {

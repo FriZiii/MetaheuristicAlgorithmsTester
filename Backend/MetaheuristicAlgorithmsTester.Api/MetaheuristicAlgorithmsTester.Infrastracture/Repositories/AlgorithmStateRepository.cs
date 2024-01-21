@@ -5,11 +5,40 @@ using System.Text;
 
 namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
 {
-    public class AlgorithmStateRepository(IExecutedSingleAlgorithmsRepository executedAlgorithmsRepository, BlobServiceClient blobServiceClient, IConfiguration configuration) : IAlgorithmStateRepository
+    public class AlgorithmStateRepository(IExecutedSingleAlgorithmsRepository executedSingleAlgorithmsRepository, IExecutedMultipleAlgorithmsRepository executedMultipleAlgorithmsRepository, BlobServiceClient blobServiceClient, IConfiguration configuration) : IAlgorithmStateRepository
     {
-        public async Task<string> GetState(int executedId)
+        public async Task<string> GetStateOfMultipleTest(int executedId)
         {
-            var executed = await executedAlgorithmsRepository.GetExecutedAlgorithmById(executedId);
+            var executed = await executedMultipleAlgorithmsRepository.GetExecutedAlgorithmById(executedId);
+            if (executed != null)
+            {
+                var fileName = executed.AlgorithmStateFileName;
+
+                var containerName = configuration.GetSection("Storage:StorageNameAlgorithmsStates").Value;
+                var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                var blobClient = containerClient.GetBlobClient(fileName + ".txt");
+
+                try
+                {
+                    var response = await blobClient.DownloadAsync();
+
+                    using (var streamReader = new StreamReader(response.Value.Content))
+                    {
+                        string content = await streamReader.ReadToEndAsync();
+                        return content;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return string.Empty;
+                }
+            }
+            return string.Empty;
+        }
+
+        public async Task<string> GetStateOfSingleTest(int executedId)
+        {
+            var executed = await executedSingleAlgorithmsRepository.GetExecutedAlgorithmById(executedId);
             if (executed != null)
             {
                 var fileName = executed.AlgorithmStateFileName;

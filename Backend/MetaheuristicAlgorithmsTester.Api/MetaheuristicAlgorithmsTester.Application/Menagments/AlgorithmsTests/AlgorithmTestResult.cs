@@ -10,8 +10,8 @@
         public int TestedFitnessFunctionId { get; set; }
         public string TestedFitnessFunctionName { get; set; } = default!;
 
-        public double[] XBest { get; set; } = default!;
-        public double FBest { get; set; }
+        public double?[] XBest { get; set; } = default!;
+        public double? FBest { get; set; }
         public int NumberOfEvaluationFitnessFunction { get; set; }
         public List<ParametersError> ParametersErrors { get; set; } = default!;
         public string Message { get; set; } = default!;

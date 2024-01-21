@@ -4,6 +4,7 @@ using MetaheuristicAlgorithmsTester.Infrastracture.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MetaheuristicAlgorithmsTester.Infrastracture.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240120210326_AddedDepth")]
+    partial class AddedDepth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +47,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Algorithms", (string)null);
+                    b.ToTable("Algorithms");
                 });
 
             modelBuilder.Entity("MetaheuristicAlgorithmsTester.Domain.Entities.ExecutedMultipleAlgorithms", b =>
@@ -109,7 +112,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExecutedMultipleAlgorithms", (string)null);
+                    b.ToTable("ExecutedMultipleAlgorithms");
                 });
 
             modelBuilder.Entity("MetaheuristicAlgorithmsTester.Domain.Entities.ExecutedSingleAlgorithm", b =>
@@ -161,7 +164,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExecutedSingleAlgorithms", (string)null);
+                    b.ToTable("ExecutedSingleAlgorithms");
                 });
 
             modelBuilder.Entity("MetaheuristicAlgorithmsTester.Domain.Entities.FitnessFunction", b =>
@@ -189,7 +192,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FitnessFunctions", (string)null);
+                    b.ToTable("FitnessFunctions");
                 });
 
             modelBuilder.Entity("MetaheuristicAlgorithmsTester.Domain.Entities.ParamInfo", b =>
@@ -224,7 +227,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Migrations
 
                     b.HasIndex("AlgorithmId");
 
-                    b.ToTable("Parameters", (string)null);
+                    b.ToTable("Parameters");
                 });
 
             modelBuilder.Entity("MetaheuristicAlgorithmsTester.Domain.Entities.ParamInfo", b =>

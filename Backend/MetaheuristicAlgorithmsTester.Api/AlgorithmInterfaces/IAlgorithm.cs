@@ -6,8 +6,8 @@
         void Solve(IFitnessFunction fitnessFunction, params double[] parameters);
         ParamInfo[] ParamsInfo { get; set; }
 
-        double[] XBest { get; set; }
-        double FBest { get; set; }
+        double?[] XBest { get; set; }
+        double? FBest { get; set; }
         int NumberOfEvaluationFitnessFunction { get; set; }
 
         public bool ExecutedSuccessfully { get; set; }
