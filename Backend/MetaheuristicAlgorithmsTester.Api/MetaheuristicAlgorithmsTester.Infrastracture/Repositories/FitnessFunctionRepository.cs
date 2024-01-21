@@ -77,7 +77,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
             {
                 var containerName = configuration.GetSection("Storage:StorageNameFitnessFunctions").Value;
                 var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-                var blobClient = containerClient.GetBlobClient(fitnessFunctionToDelete.FileName);
+                var blobClient = containerClient.GetBlobClient(fitnessFunctionToDelete.FileName + ".dll");
 
                 await blobClient.DeleteIfExistsAsync();
 

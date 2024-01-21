@@ -1,11 +1,13 @@
-﻿using MetaheuristicAlgorithmsTester.Domain.Entities;
+﻿using Azure.Storage.Blobs;
+using MetaheuristicAlgorithmsTester.Domain.Entities;
 using MetaheuristicAlgorithmsTester.Domain.Interfaces;
 using MetaheuristicAlgorithmsTester.Infrastracture.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
 {
-    public class ExecutedMultipleAlgorithmsRepository(Context context) : IExecutedMultipleAlgorithmsRepository
+    public class ExecutedMultipleAlgorithmsRepository(BlobServiceClient blobServiceClient, IConfiguration configuration, Context context) : IExecutedMultipleAlgorithmsRepository
     {
         public async Task<int> AddExecudedAlgorithm(ExecutedMultipleAlgorithms executedAlgorithm)
         {
@@ -59,6 +61,15 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
             {
                 foreach (var toDelete in executedToDelete)
                 {
+                    if (!string.IsNullOrEmpty(toDelete.AlgorithmStateFileName))
+                    {
+                        var containerName = configuration.GetSection("Storage:StorageNameAlgorithmsStates").Value;
+                        var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+                        var blobClient = containerClient.GetBlobClient(toDelete.AlgorithmStateFileName + ".txt");
+
+                        await blobClient.DeleteIfExistsAsync();
+                    }
+
                     context.ExecutedMultipleAlgorithms.Remove(toDelete);
                     await context.SaveChangesAsync();
                 }
