@@ -3,7 +3,7 @@
     public class AlgorithmTestResult
     {
         public int ExecutedTestId { get; set; }
-        public TimeSpan ExecutionTime { get; set; }
+        public TimeSpan? ExecutionTime { get; set; }
         public int TestedAlgorithmId { get; set; }
         public string TestedAlgorithmName { get; set; } = default!;
 
