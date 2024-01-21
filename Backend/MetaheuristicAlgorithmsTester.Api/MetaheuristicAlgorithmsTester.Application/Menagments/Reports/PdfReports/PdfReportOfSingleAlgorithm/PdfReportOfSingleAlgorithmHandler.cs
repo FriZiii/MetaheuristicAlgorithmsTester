@@ -16,7 +16,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports.PdfReport
             var fitnessFunction = await fitnessFunctionRepository.GetFitnessFunctionById(execudedAlgorithmData.TestedFitnessFunctionId);
             var algorithm = await algorithmsRepository.GetAlgorithmById(execudedAlgorithmData.TestedAlgorithmId);
 
-            var fileContentRaw = GenerateReportContent.GeneratePpfContentOfSingleAlgorithmTest(execudedAlgorithmData, algorithm, fitnessFunction);
+            var fileContentRaw = GenerateReportContent.GeneratePdfContentOfSingleAlgorithmTest(execudedAlgorithmData, algorithm, fitnessFunction);
 
             var pdfRenderer = new IronPdf.ChromePdfRenderer();
             var fileContent = pdfRenderer.RenderHtmlAsPdf(fileContentRaw).BinaryData;

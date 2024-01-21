@@ -5,7 +5,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
 {
     public static class GenerateReportContent
     {
-        public static string GeneratePpfContentOfSingleAlgorithmTest(ExecutedSingleAlgorithm executedAlgorithm, Algorithm? algorithm, FitnessFunction? fitnessFunction)
+        public static string GeneratePdfContentOfSingleAlgorithmTest(ExecutedSingleAlgorithm executedAlgorithm, Algorithm? algorithm, FitnessFunction? fitnessFunction)
         {
             if (algorithm == null || fitnessFunction == null)
             {
@@ -78,7 +78,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
             }
         }
 
-        public static string GeneratePpfContentOfMultipleAlgorithmsTest(List<ExecutedMultipleAlgorithms> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
+        public static string GeneratePdfContentOfMultipleAlgorithmsTest(List<ExecutedMultipleAlgorithms> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
         {
             if (algorithms.Count == executedAlgorithms.Count && algorithms.All(x => x != null) && executedAlgorithms.All(y => y != null))
             {
@@ -96,9 +96,9 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
                     htmlBuilder.AppendLine($"<p>Parameters: </p>");
                     if (executedAlgorithms[i].Parameters.Count() == algorithms[i].Parameters.Count())
                     {
-                        for (int j = 0; j < executedAlgorithms[j].Parameters.Count; j++)
+                        for (int j = 0; j < executedAlgorithms[i].Parameters.Count; j++)
                         {
-                            htmlBuilder.AppendLine($"<li>{algorithms[j].Parameters[j].Name}: {executedAlgorithms[j].Parameters[j]} - {algorithms[j].Parameters[j].Description}</li>");
+                            htmlBuilder.AppendLine($"<li>{algorithms[i].Parameters[j].Name}: {executedAlgorithms[i].Parameters[j]} - {algorithms[i].Parameters[j].Description}</li>");
                         }
                     }
                     htmlBuilder.AppendLine($"</div>");
@@ -118,7 +118,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
                     }
 
 
-                    htmlBuilder.AppendLine("<hr/>");
+                    htmlBuilder.AppendLine("</div> <br> <hr/> <br>");
                 }
 
                 return htmlBuilder.ToString();
@@ -192,17 +192,17 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
             return report;
         }
 
-        public static string GenerateTxtContentOfMultipleAlgorithmsTest(List<ExecutedSingleAlgorithm> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
+        public static string GenerateTxtContentOfMultipleAlgorithmsTest(List<ExecutedMultipleAlgorithms> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
         {
             string report = "";
             for (int i = 0; i < executedAlgorithms.Count; i++)
             {
-                report += $"Test of single algorithm -  {executedAlgorithms[i].Date} \n";
+                report += $"Test of multiple algorithm -  {executedAlgorithms[i].Date} \n";
                 report += $"Tested Algorithm -  {executedAlgorithms[i].TestedAlgorithmName} \n";
-                report += $"Parameters:  {executedAlgorithms[i].TestedAlgorithmName} \n";
+                report += $"Parameters:  \n";
                 if (executedAlgorithms[i].Parameters.Count() == algorithms[i].Parameters.Count())
                 {
-                    for (int j = 0; j < executedAlgorithms[j].Parameters.Count; j++)
+                    for (int j = 0; j < executedAlgorithms[i].Parameters.Count; j++)
                     {
                         report += $"{algorithms[i].Parameters[j].Name}: {executedAlgorithms[i].Parameters[j]} - {algorithms[i].Parameters[j].Description} \n";
                     }

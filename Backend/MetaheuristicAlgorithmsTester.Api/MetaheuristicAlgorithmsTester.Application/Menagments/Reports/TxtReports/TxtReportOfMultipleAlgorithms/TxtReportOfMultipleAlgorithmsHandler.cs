@@ -7,29 +7,21 @@ using System.Text.Json;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports.TxtReports.TxtReportOfMultipleAlgorithms
 {
-    public class TxtReportOfMultipleAlgorithmsHandler(IExecutedSingleAlgorithmsRepository executedAlgorithmsRepository, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository) : IRequestHandler<TxtReportOfMultipleAlgorithms, ReportResult>
+    public class TxtReportOfMultipleAlgorithmsHandler(IExecutedMultipleAlgorithmsRepository executedMultipleAlgorithmsRepository, IAlgorithmsRepository algorithmsRepository, IFitnessFunctionRepository fitnessFunctionRepository) : IRequestHandler<TxtReportOfMultipleAlgorithms, ReportResult>
     {
         public async Task<ReportResult> Handle(TxtReportOfMultipleAlgorithms request, CancellationToken cancellationToken)
         {
-            var execudedAlgorithmsData = new List<ExecutedSingleAlgorithm>();
-            foreach (var executedId in request.ExecutedIds)
-            {
-                var tempExecutedData = await executedAlgorithmsRepository.GetExecutedAlgorithmById(executedId);
-                if (tempExecutedData != null)
-                {
-                    execudedAlgorithmsData.Add(tempExecutedData);
-                }
-            }
+            var execudedAlgorithmsData = await executedMultipleAlgorithmsRepository.GetExecutedAlgorithmsByExecutedId(request.ExecutedId);
 
-            if(execudedAlgorithmsData.Count <= 0)
+            if (execudedAlgorithmsData.Count <= 0)
             {
-                return new ReportResult() { IsSuccesfull = false, Message = $"The executed multiple test with ids {string.Join(", ", request.ExecutedIds)} was not found" };
+                return new ReportResult() { IsSuccesfull = false, Message = $"The executed multiple test with ids {string.Join(", ", request.ExecutedId)} was not found" };
             }
 
             var algorithms = new List<Algorithm>();
-            foreach (var algorithmData in execudedAlgorithmsData)
+            foreach (var data in execudedAlgorithmsData)
             {
-                var tempAlgorithm = await algorithmsRepository.GetAlgorithmById(algorithmData.TestedAlgorithmId);
+                var tempAlgorithm = await algorithmsRepository.GetAlgorithmById(data.TestedAlgorithmId);
                 if (tempAlgorithm != null)
                 {
                     algorithms.Add(tempAlgorithm);

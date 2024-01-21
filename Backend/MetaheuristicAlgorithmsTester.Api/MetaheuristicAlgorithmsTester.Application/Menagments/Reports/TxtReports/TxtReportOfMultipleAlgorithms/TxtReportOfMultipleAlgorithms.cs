@@ -4,6 +4,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports.TxtReport
 {
     public class TxtReportOfMultipleAlgorithms : IRequest<ReportResult>
     {
-        public List<int> ExecutedIds { get; set; } = default!;
+        public string ExecutedId { get; set; } = default!;
+        //public List<int> ExecutedIds { get; set; } = default!;
     }
 }
