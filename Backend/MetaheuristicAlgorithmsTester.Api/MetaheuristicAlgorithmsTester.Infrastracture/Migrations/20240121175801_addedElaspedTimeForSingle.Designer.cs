@@ -4,6 +4,7 @@ using MetaheuristicAlgorithmsTester.Infrastracture.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MetaheuristicAlgorithmsTester.Infrastracture.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20240121175801_addedElaspedTimeForSingle")]
+    partial class addedElaspedTimeForSingle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,9 +69,6 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Migrations
 
                     b.Property<int>("Dimension")
                         .HasColumnType("int");
-
-                    b.Property<TimeSpan>("ExecutionTime")
-                        .HasColumnType("time");
 
                     b.Property<double?>("FBest")
                         .HasColumnType("float");

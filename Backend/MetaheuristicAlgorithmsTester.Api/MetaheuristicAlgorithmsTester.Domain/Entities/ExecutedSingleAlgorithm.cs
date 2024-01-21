@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public DateOnly Date { get; set; } = default!;
+        public TimeSpan ExecutionTime { get; set; }
 
         public int TestedAlgorithmId { get; set; }
         public string TestedAlgorithmName { get; set; } = default!;
