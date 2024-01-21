@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string MultipleTestId { get; set; } = default!;
         public DateOnly Date { get; set; } = default!;
-        public TimeSpan ExecutionTime { get; set; }
+        public TimeSpan? ExecutionTime { get; set; }
 
         public int TestedAlgorithmId { get; set; }
         public string TestedAlgorithmName { get; set; } = default!;
