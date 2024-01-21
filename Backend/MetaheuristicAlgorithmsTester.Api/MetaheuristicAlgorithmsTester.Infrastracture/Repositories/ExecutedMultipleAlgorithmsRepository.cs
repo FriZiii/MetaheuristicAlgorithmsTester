@@ -31,6 +31,10 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
 
             if (existingExecutedAlgorithm != null)
             {
+                if (updatedExecutedAlgorithm.ExecutionTime != null)
+                {
+                    existingExecutedAlgorithm.ExecutionTime = updatedExecutedAlgorithm.ExecutionTime;
+                }
                 existingExecutedAlgorithm.AlgorithmStateFileName = updatedExecutedAlgorithm.AlgorithmStateFileName;
 
                 existingExecutedAlgorithm.TestedAlgorithmName = updatedExecutedAlgorithm.TestedAlgorithmName;

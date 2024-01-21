@@ -1,6 +1,7 @@
 ﻿using AlgorithmInterfaces;
 using MediatR;
 using MetaheuristicAlgorithmsTester.Domain.Interfaces;
+using System.Diagnostics;
 using System.Reflection;
 using System.Timers;
 
@@ -62,6 +63,9 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
 
                                 try
                                 {
+                                    Stopwatch stopwatch = new Stopwatch();
+                                    stopwatch.Start();
+
                                     object[] methodArgs = [fitnessFunctionInstance!, request.Parameters.ToArray()];
                                     PropertyInfo xBestProperty = algorithmType.GetProperty("XBest")!;
                                     PropertyInfo fBestProperty = algorithmType.GetProperty("FBest")!;
@@ -109,10 +113,12 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                         fBestValue = (double?)fBestProperty!.GetValue(algorithmInstance)!;
                                         numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty!.GetValue(algorithmInstance)!;
                                         executedSuccessfullyValue = (bool)executedSuccessfullyProperty!.GetValue(algorithmInstance)!;
+                                        stopwatch.Stop();
 
                                         //UpdateExecuted
                                         await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedSingleAlgorithm()
                                         {
+                                            ExecutionTime = stopwatch.Elapsed,
                                             Date = DateOnly.FromDateTime(DateTime.Now),
                                             TestedAlgorithmId = algorithm.Id,
                                             TestedAlgorithmName = algorithm.Name,
@@ -131,6 +137,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                     }
                                     finally
                                     {
+                                        stopwatch.Stop();
                                         if (timer != null)
                                             timer.Dispose();
                                     }
@@ -138,6 +145,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                     //UpdateExecuted
                                     await executedAlgorithmsRepository.UpdateExecutedAlgorithm(executedId, new Domain.Entities.ExecutedSingleAlgorithm()
                                     {
+                                        ExecutionTime = stopwatch.Elapsed,
                                         Date = DateOnly.FromDateTime(DateTime.Now),
                                         TestedAlgorithmId = algorithm.Id,
                                         TestedAlgorithmName = algorithm.Name,
@@ -154,6 +162,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
 
                                     return new AlgorithmTestResult()
                                     {
+                                        ExecutionTime = stopwatch.Elapsed,
                                         ExecutedTestId = executedId,
                                         TestedAlgorithmId = algorithm.Id,
                                         TestedAlgorithmName = algorithm.Name,

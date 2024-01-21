@@ -2,6 +2,7 @@
 using MediatR;
 using MetaheuristicAlgorithmsTester.Domain.Entities;
 using MetaheuristicAlgorithmsTester.Domain.Interfaces;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.TestMultipleAlgorithms
@@ -35,6 +36,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                     var x = new ExecutedMultipleAlgorithms()
                     {
                         Date = date,
+                        ExecutionTime = algorithmResult.ExecutionTime,
                         MultipleTestId = multipleExecutedId,
                         FBest = algorithmResult.FBest,
                         XBest = algorithmResult.XBest,
@@ -56,6 +58,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
 
             var result = new MultipleAlgorithmTestResult()
             {
+                TotalExecutionTime = TimeSpan.FromTicks(executedAlgorithms.Where(x => x.ExecutionTime != null).Sum(x => x.ExecutionTime.Value.Ticks)),
                 MultipleExecutedId = multipleExecutedId,
                 ExecutedAlgorithms = executedAlgorithms
             };
@@ -97,6 +100,8 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                 object fitnessFunctionInstance = Activator.CreateInstance(fitnessFunctionType);
 
                                 var currentParameter = new List<double>();
+                                Stopwatch stopwatch = new Stopwatch();
+                                stopwatch.Start();
                                 try
                                 {
                                     List<List<double>> parameterCombinations = GenerateVariance(depth, algorithm.Parameters.ToArray(), algorithm.Parameters.Count - 1);
@@ -118,8 +123,10 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
 
                                         if (fBestValue <= satisfiedResult && fBestValue != null && satisfiedResult != double.NaN)
                                         {
+                                            stopwatch.Stop();
                                             return new Result()
                                             {
+                                                ExecutionTime = stopwatch.Elapsed,
                                                 TestedAlgorithmId = algorithm.Id,
                                                 TestedAlgorithmName = algorithm.Name,
                                                 TestedFitnessFunctionId = fitnessFunction.Id,
@@ -147,10 +154,13 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                             }
                                         }
                                     }
+                                    stopwatch.Stop();
+                                    lastResult.ExecutionTime = stopwatch.Elapsed;
                                     return lastResult;
                                 }
                                 catch (Exception ex)
                                 {
+                                    stopwatch.Stop();
                                     return null;
                                 }
                             }
@@ -219,6 +229,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
     {
         public int TestedAlgorithmId { get; set; }
         public string TestedAlgorithmName { get; set; } = default!;
+        public TimeSpan? ExecutionTime { get; set; }
 
         public int TestedFitnessFunctionId { get; set; }
         public string TestedFitnessFunctionName { get; set; } = default!;

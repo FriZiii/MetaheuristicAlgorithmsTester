@@ -4,6 +4,7 @@ using MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.TestM
 using MetaheuristicAlgorithmsTester.Domain.Entities;
 using MetaheuristicAlgorithmsTester.Domain.Interfaces;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Reflection;
 using System.Timers;
 
@@ -86,6 +87,8 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                         object fitnessFunctionInstance = Activator.CreateInstance(fitnessFunctionType);
 
                                         var currentParameter = new List<double>();
+                                        Stopwatch stopwatch = new Stopwatch();
+                                        stopwatch.Start();
                                         try
                                         {
                                             Result lastResult = new Result();
@@ -150,6 +153,8 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
 
                                                     if (fBestValue <= executed.SatisfiedResult && fBestValue != null && executed.SatisfiedResult != double.NaN)
                                                     {
+                                                        stopwatch.Stop();
+                                                        executedAlgorithm.ExecutionTime = TimeSpan.FromTicks(executed.ExecutionTime.Value.Ticks + stopwatch.Elapsed.Ticks);
                                                         executedAlgorithm.TestedAlgorithmId = algorithm.Id;
                                                         executedAlgorithm.TestedAlgorithmName = algorithm.Name;
                                                         executedAlgorithm.TestedFitnessFunctionId = fitnessFunction.Id;
@@ -169,6 +174,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
 
                                                         return new MultipleAlgorithmTestResult()
                                                         {
+                                                            TotalExecutionTime = TimeSpan.FromTicks(executedAlgorithmsToResult.Where(x => x.ExecutionTime != null).Sum(x => x.ExecutionTime.Value.Ticks)),
                                                             MultipleExecutedId = multipleExecutedId,
                                                             ExecutedAlgorithms = executedAlgorithmsToResult
                                                         };
@@ -189,10 +195,10 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                                         }
                                                     }
                                                 }
-                                                catch (Exception)
+                                                catch (Exception ex)
                                                 {
-
-                                                    throw;
+                                                    stopwatch.Stop();
+                                                    throw ex;
                                                 }
                                                 finally
                                                 {
@@ -202,6 +208,8 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                                 usedParameterIndexes.Add(currentParameterIndex);
                                                 currentParameterIndex++;
                                             }
+                                            stopwatch.Stop();
+                                            executedAlgorithm.ExecutionTime = TimeSpan.FromTicks(executed.ExecutionTime.Value.Ticks + stopwatch.Elapsed.Ticks);
                                             executedAlgorithm.Parameters = lastResult.Parameters;
                                             executedAlgorithm.XBest = lastResult.XBest;
                                             executedAlgorithm.FBest = lastResult.FBest;
@@ -213,6 +221,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                             executedAlgorithmsToResult = await executedMultipleAlgorithmsRepository.GetExecutedAlgorithmsByExecutedId(multipleExecutedId);
                                             return new MultipleAlgorithmTestResult()
                                             {
+                                                TotalExecutionTime = TimeSpan.FromTicks(executedAlgorithmsToResult.Where(x => x.ExecutionTime != null).Sum(x => x.ExecutionTime.Value.Ticks)),
                                                 MultipleExecutedId = multipleExecutedId,
                                                 ExecutedAlgorithms = executedAlgorithmsToResult
                                             };
@@ -256,6 +265,8 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                     object fitnessFunctionInstance = Activator.CreateInstance(fitnessFunctionType);
 
                                     var currentParameter = new List<double>();
+                                    Stopwatch stopwatch = new Stopwatch();
+                                    stopwatch.Start();
                                     try
                                     {
                                         parameterCombinations = GenerateVariance(executed.Depth, algorithm.Parameters.ToArray(), algorithm.Parameters.Count - 1);
@@ -323,6 +334,8 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
 
                                                 if (fBestValue <= executed.SatisfiedResult && fBestValue != null && executed.SatisfiedResult != double.NaN)
                                                 {
+                                                    stopwatch.Stop();
+                                                    executedAlgorithm.ExecutionTime = stopwatch.Elapsed;
                                                     executedAlgorithm.Parameters = resultParametes;
                                                     executedAlgorithm.XBest = xBestValue;
                                                     executedAlgorithm.FBest = fBestValue;
@@ -334,6 +347,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                                     executedAlgorithmsToResult = await executedMultipleAlgorithmsRepository.GetExecutedAlgorithmsByExecutedId(multipleExecutedId);
                                                     return new MultipleAlgorithmTestResult()
                                                     {
+                                                        TotalExecutionTime = TimeSpan.FromTicks(executedAlgorithmsToResult.Where(x => x.ExecutionTime != null).Sum(x => x.ExecutionTime.Value.Ticks)),
                                                         MultipleExecutedId = multipleExecutedId,
                                                         ExecutedAlgorithms = executedAlgorithmsToResult
                                                     };
@@ -356,6 +370,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                             }
                                             catch (Exception ex)
                                             {
+                                                stopwatch.Stop();
                                                 throw ex;
                                             }
                                             finally
@@ -366,6 +381,8 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                             usedParameterIndexes.Add(currentParameterIndex);
                                             currentParameterIndex++;
                                         }
+                                        stopwatch.Stop();
+                                        executedAlgorithm.ExecutionTime = stopwatch.Elapsed;
                                         executedAlgorithm.Parameters = lastResult.Parameters;
                                         executedAlgorithm.XBest = lastResult.XBest;
                                         executedAlgorithm.FBest = lastResult.FBest;
@@ -375,12 +392,14 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                         executedAlgorithmsToResult = await executedMultipleAlgorithmsRepository.GetExecutedAlgorithmsByExecutedId(multipleExecutedId);
                                         return new MultipleAlgorithmTestResult()
                                         {
+                                            TotalExecutionTime = TimeSpan.FromTicks(executedAlgorithmsToResult.Where(x => x.ExecutionTime != null).Sum(x => x.ExecutionTime.Value.Ticks)),
                                             MultipleExecutedId = multipleExecutedId,
                                             ExecutedAlgorithms = executedAlgorithmsToResult
                                         };
                                     }
                                     catch (Exception ex)
                                     {
+                                        stopwatch.Stop();
                                         throw new Exception($"Something went wrong: {ex.Message}");
                                     }
                                 }

@@ -22,6 +22,11 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Repositories
 
             if (existingExecutedAlgorithm != null)
             {
+                if (updatedExecutedAlgorithm.ExecutionTime != null)
+                {
+                    existingExecutedAlgorithm.ExecutionTime = updatedExecutedAlgorithm.ExecutionTime;
+                }
+
                 existingExecutedAlgorithm.FBest = updatedExecutedAlgorithm.FBest;
                 existingExecutedAlgorithm.XBest = updatedExecutedAlgorithm.XBest;
                 existingExecutedAlgorithm.NumberOfEvaluationFitnessFunction = updatedExecutedAlgorithm.NumberOfEvaluationFitnessFunction;
