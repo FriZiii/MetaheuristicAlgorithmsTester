@@ -15,7 +15,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
 
                 htmlBuilder.AppendLine($"<body>");
                 htmlBuilder.AppendLine($"<h1>Test of single algorithm  -  {executedAlgorithm.Date}</h1>");
-                htmlBuilder.AppendLine($"<h2>Execution time  -  execution time</h2>");
+                htmlBuilder.AppendLine($"<h2>Execution time  -  {executedAlgorithm.ExecutionTime} </h2>");
                 htmlBuilder.AppendLine($"<div class=\"container\">");
                 htmlBuilder.AppendLine($"<h4>Tested Algorithm</h4>");
                 htmlBuilder.AppendLine($"<h3>{executedAlgorithm.TestedAlgorithmName}</h3>");
@@ -47,7 +47,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
                 htmlBuilder.AppendLine("<head>\r\n    <style>\r\n        body {\r\n            font-family: Arial, Helvetica, sans-serif;\r\n            display: flex;\r\n            flex-direction: column;\r\n            align-items: center;\r\n        }\r\n        .container {\r\n            background-color: rgba(104, 158, 222, 0.42);\r\n            padding: 10px;\r\n            margin: 10px;\r\n            width: 450px;\r\n        }\r\n        h4{\r\n            font-size: 15px;\r\n            font-weight: 100;\r\n            margin: 0;\r\n        }\r\n        h3{\r\n            margin: 0 0 10 0;\r\n            font-size: 30px;\r\n        }\r\n        p{\r\n            margin: 0;\r\n            font-size:18px;\r\n        }\r\n        li{\r\n            list-style-type: decimal;\r\n            font-size: 14px;\r\n            margin-left: 10;\r\n            font-size: 20px;\r\n            margin-bottom: 3px;\r\n        }\r\n    </style>\r\n</head>");
                 htmlBuilder.AppendLine($"<body>");
                 htmlBuilder.AppendLine($"<h1>Test of single algorithm  -  {executedAlgorithm.Date}</h1>");
-                htmlBuilder.AppendLine($"<h2>Execution time  -  execution time</h2>");
+                htmlBuilder.AppendLine($"<h2>Execution time  -  {executedAlgorithm.ExecutionTime} </h2>");
                 htmlBuilder.AppendLine($"<div class=\"container\">");
                 htmlBuilder.AppendLine($"<h4>Tested Algorithm</h4>");
                 htmlBuilder.AppendLine($"<h3>{executedAlgorithm.TestedAlgorithmName}</h3>");
@@ -74,6 +74,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
                 {
                     htmlBuilder.AppendLine($"<li>{x}</li>");
                 }
+                htmlBuilder.AppendLine($"</body>");
                 return htmlBuilder.ToString();
             }
         }
@@ -82,17 +83,28 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
         {
             if (algorithms.Count == executedAlgorithms.Count && algorithms.All(x => x != null) && executedAlgorithms.All(y => y != null))
             {
+                executedAlgorithms = executedAlgorithms.Where(x => x.IsFailed == false).ToList();
                 StringBuilder htmlBuilder = new StringBuilder();
+
+                TimeSpan totalTime = TimeSpan.Zero;
+                foreach (var algorithm in executedAlgorithms)
+                {
+                    if(algorithm.ExecutionTime != null)
+                    {
+                        totalTime += (TimeSpan)algorithm.ExecutionTime;
+                    }
+                }
+                htmlBuilder.AppendLine("<head>\r\n    <style>\r\n        body {\r\n            font-family: Arial, Helvetica, sans-serif;\r\n            display: flex;\r\n            flex-direction: column;\r\n            align-items: center;\r\n        }\r\n        .container {\r\n            background-color: rgba(104, 158, 222, 0.42);\r\n            padding: 10px;\r\n            margin: 10px;\r\n            width: 450px;\r\n        }\r\n        h4{\r\n            font-size: 15px;\r\n            font-weight: 100;\r\n            margin: 0;\r\n        }\r\n        h3{\r\n            margin: 0 0 10 0;\r\n            font-size: 30px;\r\n        }\r\n        p{\r\n            margin: 0;\r\n            font-size:18px;\r\n        }\r\n        li{\r\n            list-style-type: decimal;\r\n            font-size: 14px;\r\n            margin-left: 10;\r\n            font-size: 20px;\r\n            margin-bottom: 3px;\r\n        }\r\n    \r\n        hr{\r\n            width: 500px;\r\n        }</style>\r\n</head>");
+                htmlBuilder.AppendLine($"<body>");
+                htmlBuilder.AppendLine($"<h1>Test of multiple algorithm  -  {executedAlgorithms[0].Date}</h1>");
+                htmlBuilder.AppendLine($"<h2>Total execution time: {totalTime} </h2>");
 
                 for (int i = 0; i < executedAlgorithms.Count; i++)
                 {
-                    htmlBuilder.AppendLine("<head>\r\n    <style>\r\n        body {\r\n            font-family: Arial, Helvetica, sans-serif;\r\n            display: flex;\r\n            flex-direction: column;\r\n            align-items: center;\r\n        }\r\n        .container {\r\n            background-color: rgba(104, 158, 222, 0.42);\r\n            padding: 10px;\r\n            margin: 10px;\r\n            width: 450px;\r\n        }\r\n        h4{\r\n            font-size: 15px;\r\n            font-weight: 100;\r\n            margin: 0;\r\n        }\r\n        h3{\r\n            margin: 0 0 10 0;\r\n            font-size: 30px;\r\n        }\r\n        p{\r\n            margin: 0;\r\n            font-size:18px;\r\n        }\r\n        li{\r\n            list-style-type: decimal;\r\n            font-size: 14px;\r\n            margin-left: 10;\r\n            font-size: 20px;\r\n            margin-bottom: 3px;\r\n        }\r\n    \r\n        hr{\r\n            width: 500px;\r\n        }</style>\r\n</head>");
-                    htmlBuilder.AppendLine($"<body>");
-                    htmlBuilder.AppendLine($"<h1>Test of multiple algorithm  -  {executedAlgorithms[i].Date}</h1>");
-                    htmlBuilder.AppendLine($"<h2>Execution time  -  execution time</h2>");
                     htmlBuilder.AppendLine($"<div class=\"container\">");
                     htmlBuilder.AppendLine($"<h4>Tested Algorithm</h4>");
                     htmlBuilder.AppendLine($"<h3>{executedAlgorithms[i].TestedAlgorithmName}</h3>");
+                    htmlBuilder.AppendLine($"<h4>Execution time  -  {executedAlgorithms[i].ExecutionTime}</h4>");
                     htmlBuilder.AppendLine($"<p>Parameters: </p>");
                     if (executedAlgorithms[i].Parameters.Count() == algorithms[i].Parameters.Count())
                     {
@@ -121,6 +133,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
                     htmlBuilder.AppendLine("</div> <br> <hr/> <br>");
                 }
 
+                htmlBuilder.AppendLine($"</body>");
                 return htmlBuilder.ToString();
             }
             else
@@ -170,6 +183,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
 
             string report = "";
             report += $"Test of single algorithm -  {executedAlgorithm.Date} \n";
+            report += $"Execution time -  {executedAlgorithm.ExecutionTime} \n";
             report += $"Tested Algorithm -  {executedAlgorithm.TestedAlgorithmName} \n";
             report += $"Parameters:  {executedAlgorithm.TestedAlgorithmName} \n";
             if (executedAlgorithm.Parameters.Count() == algorithm.Parameters.Count())
@@ -194,11 +208,19 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.Reports
 
         public static string GenerateTxtContentOfMultipleAlgorithmsTest(List<ExecutedMultipleAlgorithms> executedAlgorithms, List<Algorithm> algorithms, FitnessFunction fitnessFunction)
         {
+            executedAlgorithms = executedAlgorithms.Where(x => x.IsFailed == false).ToList();
             string report = "";
+            TimeSpan totalTime = TimeSpan.Zero;
+            foreach (var algorithm in executedAlgorithms)
+            {
+                totalTime += (TimeSpan)algorithm.ExecutionTime;
+            }
+            report += $"Total execution time: {totalTime} \n";
             for (int i = 0; i < executedAlgorithms.Count; i++)
             {
                 report += $"Test of multiple algorithm -  {executedAlgorithms[i].Date} \n";
                 report += $"Tested Algorithm -  {executedAlgorithms[i].TestedAlgorithmName} \n";
+                report += $"Execution Time -  {executedAlgorithms[i].ExecutionTime} \n";
                 report += $"Parameters:  \n";
                 if (executedAlgorithms[i].Parameters.Count() == algorithms[i].Parameters.Count())
                 {
