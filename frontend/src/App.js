@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from "react";
-import api from "./components/apiConfig";
 import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
+import CheckSingle from "./pages/CheckSingle";
+import CheckMultiple from "./pages/CheckMultiple";
+import TestSingleAlgorithm from "./pages/TestSingleAlgorithm";
+import TestMultipleAlgorithms from "./pages/TestMultipleAlgorithms";
+import AddAlgorithmDll from "./pages/AddAlgorithmDll";
+import AddFitnessFunction from "./pages/AddFitnessFunction";
+import { Routes, Route } from "react-router-dom";
+import api from "./components/apiConfig";
 
-import {
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
-  Button,
-  Card,
-  Grid,
-  CardContent,
-  Container,
-  CssBaseline,
-} from "@mui/material";
+import TransitionAlerts from "./components/TransitionAlerts";
+
+import { Container, CssBaseline, Box } from "@mui/material";
 import "./App.css";
+import Navbar from "./pages/Navbar";
 
 const darkTheme = createTheme({
   palette: {
@@ -24,107 +22,88 @@ const darkTheme = createTheme({
 });
 
 function App() {
+  const theme = useTheme();
   const [algorithms, setAlgorithms] = useState([]);
   const [fitnessFunctions, setFitnessFunctions] = useState([]);
-  const [selectedAlgorithm, setSelectedAlgorithm] = useState(null);
-  const [selectedFitnessFunction, setSelectedFitnessFunction] = useState([]);
-  const theme = useTheme();
+  const [alerts, setAlerts] = useState([]); // {severity: "success", message: "Algorithm added successfully"}
 
   const fetchAlgorithms = async () => {
     api
-      .get("http://localhost:3001/api/get")
+      .get("Algorithms")
       .then((response) => {
+        console.log(response.data);
         setAlgorithms(response.data);
       })
       .catch((error) => {
-        setAlgorithms([
-          { name: "a1", id: 0 },
-          { name: "a2", id: 1 },
-          { name: "a3", id: 2 },
-        ]);
+        console.log(error);
       });
   };
+
+  const deleteFitnessFunction = async (id) => {
+    api
+      .delete(`fitnessfunction/${id}`)
+      .then((response) => {
+        console.log(response);
+        addAlert("success", response.data);
+        fitnessFunctions.fitnessFunctions =
+          fitnessFunctions.fitnessFunctions.filter(
+            (fitnessFunction) => fitnessFunction.id !== id
+          );
+      })
+      .catch((error) => {
+        addAlert("error", error.response.data);
+      });
+  };
+
+  const deleteAlgorithm = async (id) => {
+    api
+      .delete(`algorithms/${id}`)
+      .then((response) => {
+        console.log(response);
+        addAlert("success", response.data);
+        algorithms.algorithms = algorithms.algorithms.filter(
+          (algorithm) => algorithm.id !== id
+        );
+      })
+      .catch((error) => {
+        addAlert("error", error.response.data);
+      });
+  };
+
+  const renderTransitionAlerts = () => {
+    return alerts.map((alert) => {
+      return (
+        <TransitionAlerts severity={alert.severity} message={alert.message} />
+      );
+    });
+  };
+
+  const addAlert = (_severity, _message) => {
+    setAlerts([...alerts, { severity: _severity, message: _message }]);
+  };
+  const addAlgorithm = (newAlgorithm) => {
+    console.log(algorithms);
+    console.log(newAlgorithm);
+    //add algorithm to algorithms.algorithms
+    algorithms.algorithms.push(newAlgorithm);
+    setAlgorithms(algorithms);
+  };
+  const addFitnessFunction = (newFitnessFunction) => {
+    console.log(fitnessFunctions);
+    console.log(newFitnessFunction);
+    fitnessFunctions.fitnessFunctions.push(newFitnessFunction);
+    setFitnessFunctions(fitnessFunctions);
+  };
+
   const fetchFitnessFunction = async () => {
     api
-      .get("http://localhost:3001/api/get")
+      .get("fitnessfunction")
       .then((response) => {
-        console.log(response);
+        console.log("FF", response);
+        setFitnessFunctions(response.data);
       })
       .catch((error) => {
-        setFitnessFunctions([
-          { name: "f1", id: 0 },
-          { name: "f2", id: 1 },
-          { name: "f3", id: 2 },
-        ]);
-      });
-  };
-
-  const renderAlgorithms = () => {
-    return (
-      <Card>
-        <CardContent>
-          <FormControl>
-            <FormLabel>Algorithms</FormLabel>
-            <RadioGroup
-              value={selectedAlgorithm}
-              onChange={(event) => {
-                setSelectedAlgorithm(event.target.value);
-              }}
-            >
-              {algorithms.map((algorithm) => {
-                return (
-                  <FormControlLabel
-                    value={algorithm.id}
-                    control={<Radio />}
-                    label={algorithm.name}
-                  />
-                );
-              })}
-            </RadioGroup>
-          </FormControl>
-        </CardContent>
-      </Card>
-    );
-  };
-
-  const renderFitnessFunctions = () => {
-    return (
-      <Card>
-        <CardContent>
-          <FormControl>
-            <FormLabel>FitnessFunctions</FormLabel>
-            <RadioGroup
-              value={selectedFitnessFunction}
-              onChange={(event) => {
-                setSelectedFitnessFunction(event.target.value);
-              }}
-            >
-              {fitnessFunctions.map((fitnessFunction) => {
-                return (
-                  <FormControlLabel
-                    value={fitnessFunction.id}
-                    control={<Radio />}
-                    label={fitnessFunction.name}
-                  />
-                );
-              })}
-            </RadioGroup>
-          </FormControl>
-        </CardContent>
-      </Card>
-    );
-  };
-
-  const sendRequest = async () => {
-    await api
-      .post("http://localhost:3001/api/insert", {
-        name: "a4",
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .then((response) => {
-        console.log(response);
+        setFitnessFunctions([]);
       });
   };
   useEffect(() => {
@@ -135,30 +114,64 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
+      <Navbar />
       <Container style={{ marginTop: theme.spacing(2) }}>
-        <Grid container spacing={2}>
-          <Grid item xs={3}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                {renderAlgorithms()}
-              </Grid>
-              <Grid item xs={12}>
-                {renderFitnessFunctions()}
-              </Grid>
-              <Grid item xs={12}>
-                <Button variant="outlined" onClick={sendRequest} size="large">
-                  Send
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item xs={9}>
-            <Card>
-              <CardContent>Result</CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+        <Routes>
+          <Route
+            path="/MetaHeuristicAlgorithmsTesterFrontend"
+            element={
+              <TestSingleAlgorithm
+                algorithms={algorithms}
+                ffunctions={fitnessFunctions}
+                addAlert={addAlert}
+                deleteFitnessFunction={deleteFitnessFunction}
+                deleteAlgorithm={deleteAlgorithm}
+              />
+            }
+          />
+          <Route
+            path="/MetaHeuristicAlgorithmsTesterFrontend/testMultiple"
+            element={
+              <TestMultipleAlgorithms
+                algorithms={algorithms}
+                ffunctions={fitnessFunctions}
+                addAlert={addAlert}
+                deleteFitnessFunction={deleteFitnessFunction}
+                deleteAlgorithm={deleteAlgorithm}
+              />
+            }
+          />
+          <Route
+            path="/MetaHeuristicAlgorithmsTesterFrontend/addAlgorithm"
+            element={
+              <AddAlgorithmDll
+                addAlgorithm={addAlgorithm}
+                addAlert={addAlert}
+              />
+            }
+          />
+          <Route
+            path="/MetaHeuristicAlgorithmsTesterFrontend/addFitnessFunction"
+            element={
+              <AddFitnessFunction
+                addFitnessFunction={addFitnessFunction}
+                addAlert={addAlert}
+              />
+            }
+          />
+          <Route
+            path="/MetaHeuristicAlgorithmsTesterFrontend/checkSingleStatus"
+            element={<CheckSingle addAlert={addAlert} />}
+          />
+          <Route
+            path="/MetaHeuristicAlgorithmsTesterFrontend/checkMultipleStatus"
+            element={<CheckMultiple addAlert={addAlert} />}
+          />
+        </Routes>
       </Container>
+      <Box sx={{ position: "fixed", bottom: 0 }}>
+        {renderTransitionAlerts()}
+      </Box>
     </ThemeProvider>
   );
 }
