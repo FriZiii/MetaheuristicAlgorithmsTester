@@ -151,7 +151,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                                     numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty!.GetValue(algorithmInstance)!;
                                                     executedSuccessfullyValue = (bool)executedSuccessfullyProperty!.GetValue(algorithmInstance)!;
 
-                                                    if (fBestValue <= executed.SatisfiedResult && fBestValue != null && executed.SatisfiedResult != double.NaN)
+                                                    if (fBestValue <= executed.SatisfiedResult && executed.SatisfiedResult != null && fBestValue != null)
                                                     {
                                                         stopwatch.Stop();
                                                         executedAlgorithm.ExecutionTime = TimeSpan.FromTicks(executed.ExecutionTime.Value.Ticks + stopwatch.Elapsed.Ticks);
@@ -332,7 +332,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.C
                                                 fBestValue = (double?)fBestProperty.GetValue(algorithmInstance);
                                                 numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
 
-                                                if (fBestValue <= executed.SatisfiedResult && fBestValue != null && executed.SatisfiedResult != double.NaN)
+                                                if (fBestValue <= executed.SatisfiedResult && executed.SatisfiedResult != null && fBestValue != null)
                                                 {
                                                     stopwatch.Stop();
                                                     executedAlgorithm.ExecutionTime = stopwatch.Elapsed;

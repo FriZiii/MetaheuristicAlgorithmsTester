@@ -21,7 +21,7 @@
         public bool IsFailed { get; set; }
         public string? AlgorithmStateFileName { get; set; }
         public int? TimerFrequency { get; set; }
-        public double SatisfiedResult { get; set; }
+        public double? SatisfiedResult { get; set; }
         public int Dimension { get; set; }
         public int Depth { get; set; }
     }

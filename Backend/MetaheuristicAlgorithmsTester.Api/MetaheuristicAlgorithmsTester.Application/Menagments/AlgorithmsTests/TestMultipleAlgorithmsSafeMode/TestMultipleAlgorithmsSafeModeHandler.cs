@@ -87,7 +87,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
             return result;
         }
 
-        public async Task<Result> ExecuteWithFindBestParameters(int algorithmId, int fitnessFunctionId, int depth, int dimension, double satisfiedResult, int executedId)
+        public async Task<Result> ExecuteWithFindBestParameters(int algorithmId, int fitnessFunctionId, int depth, int dimension, double? satisfiedResult, int executedId)
         {
             var fileGuid = Guid.NewGuid().ToString("N");
             var algorithm = await algorithmsRepository.GetAlgorithmById(algorithmId);
@@ -186,7 +186,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                             numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty!.GetValue(algorithmInstance)!;
                                             executedSuccessfullyValue = (bool)executedSuccessfullyProperty!.GetValue(algorithmInstance)!;
 
-                                            if (fBestValue <= satisfiedResult && fBestValue != null && satisfiedResult != double.NaN)
+                                            if (fBestValue <= satisfiedResult && satisfiedResult != null && fBestValue != null)
                                             {
                                                 stopwatch.Stop();
                                                 executedAlgorithm.ExecutionTime = stopwatch.Elapsed;

@@ -66,7 +66,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
             return result;
         }
 
-        public async Task<Result> ExecuteWithFindBestParameters(int algorithmId, int fitnessFunctionId, int depth, int dimension, double satisfiedResult)
+        public async Task<Result> ExecuteWithFindBestParameters(int algorithmId, int fitnessFunctionId, int depth, int dimension, double? satisfiedResult)
         {
             var algorithm = await algorithmsRepository.GetAlgorithmById(algorithmId);
             var fitnessFunction = await fitnessFunctionRepository.GetFitnessFunctionById(fitnessFunctionId);
@@ -118,10 +118,10 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                         PropertyInfo numberOfEvaluationFitnessFunctionProperty = algorithmType.GetProperty("NumberOfEvaluationFitnessFunction");
 
                                         double?[] xBestValue = (double?[])xBestProperty.GetValue(algorithmInstance);
-                                        double fBestValue = (double)fBestProperty.GetValue(algorithmInstance);
+                                        double? fBestValue = (double?)fBestProperty.GetValue(algorithmInstance);
                                         int numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
 
-                                        if (fBestValue <= satisfiedResult && fBestValue != null && satisfiedResult != double.NaN)
+                                        if (fBestValue <= satisfiedResult && satisfiedResult != null && fBestValue != null)
                                         {
                                             stopwatch.Stop();
                                             return new Result()

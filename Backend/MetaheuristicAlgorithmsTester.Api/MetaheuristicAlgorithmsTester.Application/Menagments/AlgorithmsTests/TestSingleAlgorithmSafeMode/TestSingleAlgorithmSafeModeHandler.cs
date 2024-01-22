@@ -155,7 +155,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                         NumberOfEvaluationFitnessFunction = numberOfEvaluationFitnessFunctionValue,
                                         FBest = fBestValue,
                                         XBest = xBestValue!,
-                                        IsFailed = executedSuccessfullyValue,
+                                        IsFailed = !executedSuccessfullyValue,
                                         AlgorithmStateFileName = executedStateFileName,
                                         TimerFrequency = request.TimerFrequency,
                                     });

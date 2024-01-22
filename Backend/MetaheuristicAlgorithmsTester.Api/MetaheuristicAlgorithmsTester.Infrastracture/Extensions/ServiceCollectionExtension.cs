@@ -12,6 +12,7 @@ namespace MetaheuristicAlgorithmsTester.Infrastracture.Extensions
     {
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IInstructionRepository, InstructionRepository>();
             services.AddScoped<IAlgorithmsRepository, AlgorithmsRepository>();
             services.AddScoped<IFitnessFunctionRepository, FitnessFunctionRepository>();
             services.AddScoped<IExecutedMultipleAlgorithmsRepository, ExecutedMultipleAlgorithmsRepository>();

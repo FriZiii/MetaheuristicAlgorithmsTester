@@ -9,7 +9,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
         public int FitnessFunctionID { get; set; }
         public int Depth { get; set; }
         public int Dimension { get; set; }
-        public double SatisfiedResult { get; set; }
+        public double? SatisfiedResult { get; set; }
         public int TimerFrequency { get; set; }
     }
 }
