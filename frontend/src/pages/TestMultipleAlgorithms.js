@@ -517,7 +517,7 @@ function TestMultipleAlgorithms(props) {
       endpoint = "AlgorithmTester/TestMultipleAlgorithmsSafeMode";
       params.interval = safeModeInterval;
     }
-    if (!isSatisfiedResult) params.satisfiedResult = NaN;
+    if (!isSatisfiedResult) params.satisfiedResult = null;
 
     console.log(params);
     try {
