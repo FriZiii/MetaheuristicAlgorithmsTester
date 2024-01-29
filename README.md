@@ -1,6 +1,6 @@
 ## Running the app
 
-In the project directory, you can install all dependencies:
+In the project directory `/frontend`, you can install all dependencies:
 
 ### `npm i`
 
@@ -15,3 +15,4 @@ Open [http://localhost:3000/MetaHeuristicAlgorithmsTesterFrontend](http://localh
 
 To set a custom address for API endpoints go to `/frontend/src/components/apiConfig.js`.
 There you can replace the baseURL for your custom address.
+
