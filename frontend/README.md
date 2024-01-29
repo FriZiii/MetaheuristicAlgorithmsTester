@@ -1,6 +1,6 @@
 ## Running the app
 
-In the project directory, you can install all dependencies:
+In the project directory `/frontend`, you can install all dependencies:
 
 ### `npm i`
 
