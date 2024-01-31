@@ -151,6 +151,10 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
 
                                     await executedMultipleAlgorithmsRepositor.UpdateExecutedAlgorithm(executedId, executedAlgorithm);
                                     int currentParameterIndex = 0;
+                                    double?[] xBestValue;
+                                    double? fBestValue;
+                                    int numberOfEvaluationFitnessFunctionValue;
+                                    bool executedSuccessfullyValue;
                                     usedParameterIndexes = new List<int>();
 
                                     foreach (var parameters in parameterCombinations)
@@ -161,11 +165,6 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                         PropertyInfo fBestProperty = algorithmTypeTemp.GetProperty("FBest");
                                         PropertyInfo numberOfEvaluationFitnessFunctionProperty = algorithmTypeTemp.GetProperty("NumberOfEvaluationFitnessFunction");
                                         PropertyInfo executedSuccessfullyProperty = algorithmTypeTemp.GetProperty("ExecutedSuccessfully")!;
-
-                                        double?[] xBestValue;
-                                        double? fBestValue;
-                                        int numberOfEvaluationFitnessFunctionValue;
-                                        bool executedSuccessfullyValue;
 
                                         currentParameter = parameters;
                                         List<double> resultParametes = [.. parameters, dimension];

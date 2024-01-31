@@ -101,6 +101,9 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
 
                                 var currentParameter = new List<double>();
                                 Stopwatch stopwatch = new Stopwatch();
+                                double?[] xBestValue;
+                                double? fBestValue;
+                                int numberOfEvaluationFitnessFunctionValue;
                                 stopwatch.Start();
                                 try
                                 {
@@ -117,9 +120,9 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                         PropertyInfo fBestProperty = algorithmType.GetProperty("FBest");
                                         PropertyInfo numberOfEvaluationFitnessFunctionProperty = algorithmType.GetProperty("NumberOfEvaluationFitnessFunction");
 
-                                        double?[] xBestValue = (double?[])xBestProperty.GetValue(algorithmInstance);
-                                        double? fBestValue = (double?)fBestProperty.GetValue(algorithmInstance);
-                                        int numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
+                                        xBestValue = (double?[])xBestProperty.GetValue(algorithmInstance);
+                                        fBestValue = (double?)fBestProperty.GetValue(algorithmInstance);
+                                        numberOfEvaluationFitnessFunctionValue = (int)numberOfEvaluationFitnessFunctionProperty.GetValue(algorithmInstance);
 
                                         if (fBestValue <= satisfiedResult && satisfiedResult != null && fBestValue != null)
                                         {
@@ -140,7 +143,7 @@ namespace MetaheuristicAlgorithmsTester.Application.Menagments.AlgorithmsTests.T
                                         }
                                         else
                                         {
-                                            if (lastResult.FBest > fBestValue)
+                                            if (lastResult.FBest > fBestValue || lastResult.FBest == null)
                                             {
                                                 lastResult.TestedAlgorithmId = algorithm.Id;
                                                 lastResult.TestedAlgorithmName = algorithm.Name;
