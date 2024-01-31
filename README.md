@@ -11,7 +11,7 @@ Get the connection string from AzureStorage and replace it in appsettings.json.
 
 ### Create a database
 To create a database, just type `update-database` in the `nuget` console.
-You can view the database in AzureDataStudio by connecting to the `(localdb)mssqllocaldb` server.
+You can view the database in AzureDataStudio by connecting to the `(localdb)\\mssqllocaldb` server.
 
 ### Start the Api
 In the `/backend` project directory, you can run the application from the .sln file
